@@ -1,5 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const areas = [
   { id: 'residential', title: 'Residential', image: '/Image-15946.jpg' },
@@ -19,13 +20,19 @@ export default function Expertise() {
           whileHover="hover"
         >
           <motion.div 
-            className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-luminosity transition-all duration-700"
-            style={{ backgroundImage: `url(${area.image})` }}
+            className="absolute inset-0 opacity-40 mix-blend-luminosity transition-all duration-700"
             variants={{
               initial: { scale: 1, opacity: 0.3 },
               hover: { scale: 1.05, opacity: 0.7, mixBlendMode: 'normal' }
-            }}
-          ></motion.div>
+            } as any}
+          >
+            <Image 
+              src={area.image}
+              alt={area.title}
+              fill
+              className="object-cover object-center"
+            />
+          </motion.div>
           
           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/10 transition-colors duration-700"></div>
           
@@ -36,7 +43,7 @@ export default function Expertise() {
               variants={{
                 initial: { WebkitTextStroke: '1px rgba(255,255,255,0.5)', color: 'transparent' },
                 hover: { WebkitTextStroke: '1px white', color: 'white' }
-              }}
+              } as any}
               transition={{ duration: 0.4 }}
             >
               {area.title}
