@@ -30,7 +30,7 @@ export default function Philosophy() {
         />
       </motion.div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="w-full px-6 md:px-12 lg:px-20 xl:px-32 relative z-10">
         <div className="max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -41,14 +41,19 @@ export default function Philosophy() {
             <h2 className="text-sm tracking-[0.3em] uppercase text-black font-semibold mb-8">Philosophy</h2>
             
             <p className="text-3xl md:text-5xl font-light leading-snug text-black">
-              Every building begins with a <span className="italic font-semibold font-serif">conversation</span> between people, light, and space.
+              Architecture is not just about spaces. It's about how we experience them.
             </p>
             
             <div className="mt-12 w-16 h-[1px] bg-black"></div>
             
-            <p className="mt-12 text-lg text-black/80 max-w-2xl font-light leading-relaxed">
-              We don't just build structures; we craft experiences. By understanding the intricate dance of natural light and human interaction, we shape spaces that inspire, endure, and tell a unique story of their inhabitants.
-            </p>
+            <div className="mt-12 text-lg text-black/80 max-w-2xl font-light leading-relaxed space-y-6">
+              <p>
+                At Nidhivan Design Studio, we believe that thoughtful architecture begins with understanding people, nature, and the spaces that connect them. Every design is an opportunity to create something meaningful, where form meets function and simplicity meets purpose.
+              </p>
+              <p>
+                We strive to create timeless spaces that embrace natural light, respect their surroundings, and bring a sense of harmony to everyday life.
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>

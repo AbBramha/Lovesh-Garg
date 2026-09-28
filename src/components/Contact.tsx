@@ -5,13 +5,23 @@ export default function Contact() {
   return (
     <section className="relative min-h-[80vh] bg-black text-white flex items-end">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Desktop Footer Background */}
         <motion.div 
           initial={{ scale: 1.1, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.5 }}
-          className="w-full h-full bg-cover bg-center"
+          className="w-full h-full bg-cover bg-center hidden md:block"
           style={{ backgroundImage: "url('/Footer.png')" }}
+        ></motion.div>
+        {/* Mobile Footer Background */}
+        <motion.div 
+          initial={{ scale: 1.1, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5 }}
+          className="w-full h-full bg-cover bg-center md:hidden"
+          style={{ backgroundImage: "url('/mobile footer.png')" }}
         ></motion.div>
       </div>
 
