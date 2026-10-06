@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function Contact() {
   return (
-    <section className="relative min-h-[80vh] bg-black text-white flex items-end">
+    <section className="relative min-h-[50vh] bg-black text-white flex items-end">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Desktop Footer Background */}
         <motion.div 
@@ -25,7 +25,7 @@ export default function Contact() {
         ></motion.div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 pb-20 pt-32 flex flex-col md:flex-row justify-between items-end gap-12">
+      <div className="container mx-auto px-6 relative z-10 pb-10 pt-16 flex flex-col md:flex-row justify-between items-end gap-8">
         <div className="w-full md:w-1/2">
           <h2 className="text-5xl md:text-8xl font-light mb-8">Let's Talk.</h2>
           <form className="flex flex-col gap-6 max-w-md">
