@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function Contact() {
   return (
-    <section className="relative min-h-[50vh] bg-black text-white flex items-end">
+    <section id="contact" className="relative min-h-[50vh] bg-black text-white flex items-end">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Desktop Footer Background */}
         <motion.div 
@@ -39,8 +39,8 @@ export default function Contact() {
         <div className="w-full md:w-1/3 flex flex-col items-start md:items-end gap-6 text-white/80 font-light">
           <div className="text-left md:text-right">
             <h3 className="text-xs tracking-[0.3em] uppercase text-white font-semibold mb-4">Inquiries</h3>
-            <a href="mailto:hello@loveshgarg.com" className="text-xl font-medium hover:text-white transition-colors block mb-2">hello@loveshgarg.com</a>
-            <a href="tel:+919876543210" className="text-lg hover:text-white transition-colors block">+91 98765 43210</a>
+            <a href="mailto:loveshgarg@gmail.com" className="text-xl font-medium hover:text-white transition-colors block mb-2">loveshgarg@gmail.com</a>
+            <a href="tel:+919999710103" className="text-lg hover:text-white transition-colors block">+91 9999710103</a>
           </div>
 
           <div className="text-left md:text-right mt-4">
@@ -54,7 +54,7 @@ export default function Contact() {
           <div className="flex gap-6 text-xs uppercase tracking-widest mt-8 font-semibold">
             <a href="#" className="hover:text-white transition-colors">Instagram</a>
             <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-white transition-colors">WhatsApp</a>
+            <a href="https://wa.me/919999710103" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a>
           </div>
           
           <p className="mt-8 text-xs text-white/50 font-medium">© 2026 Ar. Lovesh Garg. All rights reserved.</p>

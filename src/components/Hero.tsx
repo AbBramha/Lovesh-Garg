@@ -1,6 +1,7 @@
 'use client';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Link from 'next/link';
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,12 +57,16 @@ export default function Hero() {
           transition={{ duration: 1, delay: 6.6 }}
           className="flex flex-col sm:flex-row items-start gap-2 md:gap-4 pointer-events-auto"
         >
-          <button className="px-4 py-1.5 md:px-8 md:py-3 text-[11px] md:text-base bg-white text-black rounded md:rounded-lg font-medium tracking-wide hover:bg-neutral-200 transition-colors">
-            Find Your Design Style
-          </button>
-          <button className="px-4 py-1.5 md:px-8 md:py-3 text-[11px] md:text-base border border-white text-white rounded md:rounded-lg font-medium tracking-wide hover:bg-white/10 transition-colors">
-            Estimate Your Project
-          </button>
+          <Link href="#design-matrix">
+            <button className="px-4 py-1.5 md:px-8 md:py-3 text-[11px] md:text-base bg-white text-black rounded md:rounded-lg font-medium tracking-wide hover:bg-neutral-200 transition-colors">
+              Find Your Design Style
+            </button>
+          </Link>
+          <Link href="#project-estimator">
+            <button className="px-4 py-1.5 md:px-8 md:py-3 text-[11px] md:text-base border border-white text-white rounded md:rounded-lg font-medium tracking-wide hover:bg-white/10 transition-colors">
+              Estimate Your Project
+            </button>
+          </Link>
         </motion.div>
       </div>
       

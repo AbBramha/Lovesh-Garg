@@ -2,15 +2,8 @@
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-
-const projects = [
-  { id: 1, title: 'The Glass Pavilion', image: '/Image-15946.jpg', location: 'New York', area: '12,000 sq ft' },
-  { id: 2, title: 'Brutal Echo', image: '/Image-4569.jpg', location: 'London', area: '8,500 sq ft' },
-  { id: 3, title: 'Minimalist Haven', image: '/Image-52072.jpg', location: 'Tokyo', area: '4,200 sq ft' },
-  { id: 4, title: 'Concrete Oasis', image: '/Image-15946.jpg', location: 'Berlin', area: '9,100 sq ft' },
-  { id: 5, title: 'Timber Retreat', image: '/Image-4569.jpg', location: 'Oslo', area: '5,400 sq ft' },
-  { id: 6, title: 'Urban Light', image: '/Image-52072.jpg', location: 'Paris', area: '6,800 sq ft' },
-];
+import Link from 'next/link';
+import { projects } from '@/data/projects';
 
 export default function FeaturedProjects() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -28,7 +21,7 @@ export default function FeaturedProjects() {
   };
 
   return (
-    <section className="relative min-h-[90vh] py-24 flex flex-col justify-center bg-[#0a0a0a]">
+    <section id="works" className="relative min-h-[90vh] py-24 flex flex-col justify-center bg-[#0a0a0a]">
       {/* Global Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <Image 
@@ -43,7 +36,10 @@ export default function FeaturedProjects() {
       
       <div className="w-full relative z-10">
         <div className="px-6 md:px-12 lg:px-20 mb-8 md:mb-12 flex justify-between items-end">
-          <h2 className="text-sm tracking-[0.3em] uppercase text-white font-medium">Selected Works</h2>
+          <div>
+            <span className="text-xs font-mono uppercase tracking-[0.25em] text-white/40 block mb-1">Portfolio</span>
+            <h2 className="text-sm md:text-base tracking-[0.3em] uppercase text-white font-medium">Selected Works</h2>
+          </div>
           
           {/* Navigation Buttons */}
           <div className="flex gap-4">
@@ -78,26 +74,41 @@ export default function FeaturedProjects() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="w-[80vw] max-w-[380px] aspect-square flex-shrink-0 relative group shadow-2xl snap-center md:snap-start"
             >
-              <div className="absolute inset-0 overflow-hidden rounded-sm">
-                <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
-                  <Image 
-                    src={project.image} 
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 80vw, 380px"
-                    className="object-cover"
-                  />
+              <Link href={`/projects/${project.slug}`} className="block w-full h-full">
+                <div className="absolute inset-0 overflow-hidden rounded-sm">
+                  <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
+                    <Image 
+                      src={project.image} 
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 768px) 80vw, 380px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-500"></div>
+
+                  {/* Hover Pill Cue */}
+                  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-wider text-white">
+                    <span>Explore</span>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-500"></div>
-              </div>
-              <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                <h3 className="text-2xl md:text-4xl font-light mb-2 text-white">{project.title}</h3>
-                <div className="flex gap-4 text-xs md:text-sm text-neutral-300 font-light tracking-wide">
-                  <span>{project.location}</span>
-                  <span>|</span>
-                  <span>{project.area}</span>
+                <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full bg-gradient-to-t from-black/95 via-black/50 to-transparent">
+                  <span className="text-[10px] uppercase font-mono text-white/50 block mb-1">
+                    {project.category}
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-serif font-light mb-2 text-white group-hover:text-neutral-200 transition-colors">
+                    {project.title}
+                  </h3>
+                  <div className="flex gap-4 text-xs md:text-sm text-neutral-300 font-light tracking-wide">
+                    <span>{project.location}</span>
+                    <span>|</span>
+                    <span>{project.area}</span>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </motion.div>
           ))}
           {/* Spacer block to ensure the last item isn't flush with the right screen edge on scroll */}

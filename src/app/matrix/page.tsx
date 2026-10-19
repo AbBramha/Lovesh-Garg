@@ -107,6 +107,70 @@ const resultImages: Record<string, string> = {
   "Industrial": "/matrix/Industrial.jpg"
 };
 
+interface StyleDetails {
+  subtitle: string;
+  description: string;
+  materials: string[];
+  spatialVibe: string;
+}
+
+const styleDetails: Record<string, StyleDetails> = {
+  "Contemporary Luxury": {
+    subtitle: "Bold Geometry · Statement Materials · Layered Grandeur",
+    description: "Defined by strong geometric forms, statement materials like rich marble, warm timber, and polished brass accents. Features carefully controlled, dramatic lighting and a grand sense of volume crafted to leave an unforgettable impression.",
+    materials: ["Bookmatched Marble", "Warm Timber", "Brushed Brass Details", "Layered Illumination"],
+    spatialVibe: "Sculpted opulence, high-impact focal drama & tailored refinement."
+  },
+  "Japandi": {
+    subtitle: "Warm Minimalist · Tactile Serenity · Organic Comfort",
+    description: "A harmonious synthesis of Scandinavian warmth and Japanese functional minimalism. Emphasizes warm wood tones, tactile textured surfaces, soft natural lighting, and comfortable, welcoming spaces designed for mindful, clutter-free everyday living.",
+    materials: ["Natural Oak & Ash", "Rattan & Linen", "Wabi-Sabi Ceramics", "Muted Earth Tones"],
+    spatialVibe: "Calm visual quiet, organic warmth & understated balance."
+  },
+  "Tropical Modern": {
+    subtitle: "Biophilic Harmony · Verdant Courtyards · Breathing Spaces",
+    description: "Blurs the threshold between indoor sanctuary and outdoor nature. Utilizes tranquil courtyards, shaded verandas, deep overhangs, and expansive glass portals that capture breezes, filtered daylight, and lush greenery that ages gracefully with time.",
+    materials: ["Indigenous Stone & Teak", "Courtyards & Water", "Shaded Deep Terraces", "Abundant Natural Greenery"],
+    spatialVibe: "Deeply relaxing, indoor-outdoor flow & climate-responsive serenity."
+  },
+  "Modern Minimal": {
+    subtitle: "Clean Lines · Uncluttered Restraint · Pure Light",
+    description: "Rooted in simplicity, visual quiet, and spatial discipline. Features crisp geometric planes, concealed integrated storage, seamless circulation, and a restrained monochromatic palette that elevates soft natural daylight into the primary design element.",
+    materials: ["Smooth Micro-cement", "Concealed Millwork", "Linen & Glass", "Soft Diffused Daylight"],
+    spatialVibe: "Impeccable order, visual quiet & calming spatial clarity."
+  },
+  "Contemporary Indian": {
+    subtitle: "Rooted Heritage · Artisanal Warmth · Evolving Story",
+    description: "A sensitive dialogue between cultural roots and contemporary aesthetics. Combines balanced proportions, native stone, terracotta, timber, cane, and terrazzo to craft a home that feels familiar, durable, and built to celebrate life stories across generations.",
+    materials: ["Natural Stone & Timber", "Terracotta & Clay Finishes", "Cane, Plants & Terrazzo", "Handcrafted Metal"],
+    spatialVibe: "Grounded permanence, cultural depth & evolving warmth."
+  },
+  "Classical Indian": {
+    subtitle: "Artisanal Craftsmanship · Heritage Proportions · Regal Depth",
+    description: "Rooted in timeless cultural heritage and artisanal mastery. Celebrates traditional balanced proportions, earthy lime plaster walls, terracotta accents, intricately carved timber, and vibrant patterned fabrics that bestow a stately, sanctuary-like presence.",
+    materials: ["Earthy Plaster & Lime", "Hand-carved Timber", "Terracotta & Tile Inlays", "Heritage Patterned Fabrics"],
+    spatialVibe: "Artisanal authenticity, regal gravitas & crafted timelessness."
+  },
+  "Modern Style": {
+    subtitle: "Dynamic Living · Flexible Volumes · Strong Focal Points",
+    description: "Designed for expressive, dynamic contemporary lifestyles and hosting. Features versatile open-plan rooms, strong focal features, adaptable lighting systems, and crisp materials that comfortably adjust between intimate downtime and lively gatherings.",
+    materials: ["Architectural Metal & Glass", "Engineered Hardwood", "Adaptable Lighting", "Statement Sculptural Accents"],
+    spatialVibe: "Flexible openness, vibrant hosting & dynamic modern comfort."
+  },
+  "Neo Classical": {
+    subtitle: "Symmetrical Harmony · Stately Grandeur · Timeless Elegance",
+    description: "Inspired by classical symmetry, noble proportions, and architectural hierarchy. Showcases distinct formal spaces, layered cornices and mouldings, statement chandeliers, and curated luxury materials that remain elegant even as passing trends change.",
+    materials: ["Fine Marble & Stone", "Architectural Mouldings", "Layered Chandeliers & Brass", "Formal Symmetrical Millwork"],
+    spatialVibe: "Generational prestige, formal grandeur & dignified elegance."
+  },
+  "Industrial": {
+    subtitle: "Structural Honesty · Open Loft Volumes · Raw Authenticity",
+    description: "Celebrates unadorned structural honesty and unconventional volume. Highlights exposed concrete walls, blackened structural steel, expansive Crittall-style glass panels, and open circulation that together create an authentic, edgy, and spacious architectural statement.",
+    materials: ["Board-formed Concrete", "Blackened Steel Framing", "Expansive Glazing", "Raw Reclaimed Timber"],
+    spatialVibe: "High-volume openness, raw tactile edge & structural authenticity."
+  }
+};
+
 export default function MatrixPage() {
   const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState(1);
@@ -294,76 +358,195 @@ export default function MatrixPage() {
           {step === 6 && results && (
             <motion.div 
               key="result"
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="max-w-6xl mx-auto"
+              className="max-w-6xl mx-auto pb-16"
             >
-              <div className="text-center mb-16">
-                <span className="uppercase tracking-widest text-xs font-semibold text-white/50 mb-4 block">Your Design Matrix</span>
-                <h2 className="text-5xl md:text-7xl font-serif font-light mb-6">The {results.primary}</h2>
-                <p className="text-xl text-white/70 max-w-2xl mx-auto">
-                  Based on your preferences, your aesthetic naturally aligns with {results.primary}, influenced by {results.secondary} and {results.supporting} elements.
+              {/* Top Header */}
+              <div className="text-center mb-12 md:mb-16">
+                <span className="uppercase tracking-[0.25em] text-xs font-semibold text-white/50 mb-3 block">
+                  Your Custom Architectural Blueprint
+                </span>
+                <h2 className="text-4xl md:text-6xl font-serif font-light mb-4 text-white">
+                  The {results.primary}
+                </h2>
+                <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto font-light leading-relaxed">
+                  Based on your preferences, your aesthetic naturally aligns with <span className="text-white font-normal">{results.primary}</span>, complemented by <span className="text-white font-normal">{results.secondary}</span> and enriched with <span className="text-white font-normal">{results.supporting}</span> accents.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-16">
-                <div className="md:col-span-8 relative aspect-video md:aspect-auto md:h-[600px] overflow-hidden">
-                  <Image 
-                    src={resultImages[results.primary]}
-                    alt={results.primary}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute bottom-6 left-6 bg-black/80 backdrop-blur-sm px-6 py-3 border border-white/10">
-                    <p className="uppercase tracking-widest text-xs font-semibold text-white/70">Primary Style</p>
-                    <p className="text-xl font-serif">{results.primary}</p>
-                  </div>
-                </div>
-                
-                <div className="md:col-span-4 flex flex-col gap-6">
-                  <div className="relative flex-1 aspect-square md:aspect-auto overflow-hidden">
+              {/* 1. PRIMARY DESIGN LANGUAGE CARD */}
+              <div className="mb-10 bg-white/[0.03] border border-white/10 rounded-sm overflow-hidden p-6 md:p-8 backdrop-blur-sm">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                  {/* Photo */}
+                  <div className="lg:col-span-7 relative aspect-[16/10] overflow-hidden rounded-sm border border-white/10 shadow-2xl">
                     <Image 
-                      src={resultImages[results.secondary]}
-                      alt={results.secondary}
+                      src={resultImages[results.primary]}
+                      alt={results.primary}
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute bottom-6 left-6 bg-black/80 backdrop-blur-sm px-6 py-3 border border-white/10">
-                      <p className="uppercase tracking-widest text-xs font-semibold text-white/70">Secondary Influence</p>
-                      <p className="text-lg font-serif">{results.secondary}</p>
+                    <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md px-3.5 py-1.5 border border-white/20 text-[10px] md:text-xs font-semibold tracking-widest uppercase text-white/90">
+                      Primary Design Language
                     </div>
                   </div>
-                  <div className="relative flex-1 aspect-square md:aspect-auto overflow-hidden">
-                    <Image 
-                      src={resultImages[results.supporting]}
-                      alt={results.supporting}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute bottom-6 left-6 bg-black/80 backdrop-blur-sm px-6 py-3 border border-white/10">
-                      <p className="uppercase tracking-widest text-xs font-semibold text-white/70">Supporting Element</p>
-                      <p className="text-lg font-serif">{results.supporting}</p>
+
+                  {/* Text Section Beside Photo */}
+                  <div className="lg:col-span-5 flex flex-col justify-center">
+                    <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/50 font-semibold mb-2 block">
+                      Core Aesthetic · 60% Influence
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-serif font-light text-white mb-2">
+                      {results.primary}
+                    </h3>
+                    <p className="text-xs md:text-sm text-white/60 italic mb-4 font-serif">
+                      "{styleDetails[results.primary]?.subtitle}"
+                    </p>
+                    <p className="text-xs md:text-sm text-white/80 leading-relaxed mb-6 font-light">
+                      {styleDetails[results.primary]?.description}
+                    </p>
+
+                    {/* Material Palette Chips */}
+                    <div className="mb-4">
+                      <span className="text-[10px] uppercase tracking-wider text-white/40 block mb-2 font-mono">
+                        Key Materials & Language
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {styleDetails[results.primary]?.materials.map((mat, idx) => (
+                          <span key={idx} className="text-xs px-2.5 py-1 bg-white/5 border border-white/10 text-white/80 rounded-sm">
+                            {mat}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-white/10 text-[11px] text-white/50">
+                      <span className="text-white/70 font-medium">Atmosphere:</span> {styleDetails[results.primary]?.spatialVibe}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="text-center pb-24">
-                <button 
-                  className="bg-white text-black px-12 py-5 uppercase tracking-widest text-sm hover:bg-white/80 transition-colors"
-                >
-                  Book a Consultation
-                </button>
+              {/* 2. SECONDARY & SUPPORTING CARDS (Beside Photos) */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-14">
+                
+                {/* SECONDARY INFLUENCE */}
+                <div className="bg-white/[0.03] border border-white/10 rounded-sm p-6 backdrop-blur-sm flex flex-col justify-between">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center mb-4">
+                    {/* Photo */}
+                    <div className="sm:col-span-5 relative aspect-square overflow-hidden rounded-sm border border-white/10">
+                      <Image 
+                        src={resultImages[results.secondary]}
+                        alt={results.secondary}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-1 border border-white/20 text-[9px] font-semibold tracking-wider uppercase text-white/90">
+                        Secondary
+                      </div>
+                    </div>
+
+                    {/* Text Section Beside Photo */}
+                    <div className="sm:col-span-7 flex flex-col">
+                      <span className="text-[10px] uppercase tracking-widest text-white/50 font-semibold mb-1">
+                        Secondary Influence · 25%
+                      </span>
+                      <h4 className="text-xl font-serif font-light text-white mb-1">
+                        {results.secondary}
+                      </h4>
+                      <p className="text-[11px] text-white/50 italic mb-2 font-serif">
+                        "{styleDetails[results.secondary]?.subtitle}"
+                      </p>
+                      <p className="text-xs text-white/70 leading-relaxed font-light">
+                        {styleDetails[results.secondary]?.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Materials & Spatial Note */}
+                  <div className="pt-3 border-t border-white/10">
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {styleDetails[results.secondary]?.materials.slice(0, 3).map((mat, idx) => (
+                        <span key={idx} className="text-[10px] px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded-sm">
+                          {mat}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-[11px] text-white/40">
+                      <span className="text-white/60">Role:</span> {styleDetails[results.secondary]?.spatialVibe}
+                    </p>
+                  </div>
+                </div>
+
+                {/* SUPPORTING ELEMENT */}
+                <div className="bg-white/[0.03] border border-white/10 rounded-sm p-6 backdrop-blur-sm flex flex-col justify-between">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center mb-4">
+                    {/* Photo */}
+                    <div className="sm:col-span-5 relative aspect-square overflow-hidden rounded-sm border border-white/10">
+                      <Image 
+                        src={resultImages[results.supporting]}
+                        alt={results.supporting}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-1 border border-white/20 text-[9px] font-semibold tracking-wider uppercase text-white/90">
+                        Supporting
+                      </div>
+                    </div>
+
+                    {/* Text Section Beside Photo */}
+                    <div className="sm:col-span-7 flex flex-col">
+                      <span className="text-[10px] uppercase tracking-widest text-white/50 font-semibold mb-1">
+                        Supporting Element · 15%
+                      </span>
+                      <h4 className="text-xl font-serif font-light text-white mb-1">
+                        {results.supporting}
+                      </h4>
+                      <p className="text-[11px] text-white/50 italic mb-2 font-serif">
+                        "{styleDetails[results.supporting]?.subtitle}"
+                      </p>
+                      <p className="text-xs text-white/70 leading-relaxed font-light">
+                        {styleDetails[results.supporting]?.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Materials & Spatial Note */}
+                  <div className="pt-3 border-t border-white/10">
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {styleDetails[results.supporting]?.materials.slice(0, 3).map((mat, idx) => (
+                        <span key={idx} className="text-[10px] px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded-sm">
+                          {mat}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-[11px] text-white/40">
+                      <span className="text-white/60">Role:</span> {styleDetails[results.supporting]?.spatialVibe}
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Consultation & Reset Buttons */}
+              <div className="text-center pb-12">
+                <Link href="/#contact">
+                  <button 
+                    className="bg-white text-black px-10 py-4 uppercase tracking-widest text-xs font-semibold hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10"
+                  >
+                    Book Consultation Call
+                  </button>
+                </Link>
                 <button 
                   onClick={() => {
                     sessionStorage.clear();
                     setStep(1);
                     setSelections({ 1: [], 2: [], 3: [], 4: [], 5: [] });
                   }}
-                  className="block mx-auto mt-6 text-sm underline opacity-50 hover:opacity-100 uppercase tracking-widest"
+                  className="block mx-auto mt-4 text-xs underline text-white/50 hover:text-white uppercase tracking-widest transition-colors"
                 >
-                  Retake Quiz
+                  Retake Design Matrix
                 </button>
               </div>
             </motion.div>

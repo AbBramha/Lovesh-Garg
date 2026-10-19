@@ -14,7 +14,7 @@ export default function Philosophy() {
   const y = useTransform(scrollYProgress, [0, 1], ['20%', '-20%']);
 
   return (
-    <section ref={containerRef} className="relative py-10 md:py-16 min-h-[100svh] md:min-h-[60vh] flex items-center overflow-hidden bg-white">
+    <section id="philosophy" ref={containerRef} className="relative py-10 md:py-16 min-h-[100svh] md:min-h-[60vh] flex items-center overflow-hidden bg-white">
       {/* Background elements */}
       <motion.div 
         style={{ y }} 
