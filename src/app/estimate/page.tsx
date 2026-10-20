@@ -680,11 +680,11 @@ export default function EstimatePage() {
 
               {/* Action Buttons */}
               <div className="text-center pb-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link href="/#contact" className="w-full sm:w-auto">
+                <a href="https://cal.id/nidhivandesignstudio-gmail" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                   <button className="w-full sm:w-auto bg-white text-black px-10 py-4 uppercase tracking-widest text-xs font-semibold hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10">
                     Book Consultation Call
                   </button>
-                </Link>
+                </a>
 
                 <button
                   onClick={handleReset}

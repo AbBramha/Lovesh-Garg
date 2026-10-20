@@ -52,7 +52,7 @@ export default function Contact() {
           </div>
 
           <div className="flex gap-6 text-xs uppercase tracking-widest mt-8 font-semibold">
-            <a href="#" className="hover:text-white transition-colors">Instagram</a>
+            <a href="https://www.instagram.com/nidhivan_design_studio?obrf=ZDUyYWxpaHFqdmo3" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
             <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
             <a href="https://wa.me/919999710103" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a>
           </div>

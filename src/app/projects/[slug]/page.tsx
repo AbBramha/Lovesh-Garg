@@ -231,11 +231,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </div>
 
             <div className="lg:col-span-5 flex flex-col sm:flex-row gap-4 lg:justify-end">
-              <Link href="/#contact">
+              <a href="https://cal.id/nidhivandesignstudio-gmail" target="_blank" rel="noopener noreferrer">
                 <button className="w-full sm:w-auto bg-white text-black px-8 py-4 uppercase tracking-widest text-xs font-semibold hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10">
                   Book Consultation Call
                 </button>
-              </Link>
+              </a>
               <Link href="/estimate">
                 <button className="w-full sm:w-auto border border-white/20 text-white px-8 py-4 uppercase tracking-widest text-xs font-semibold hover:bg-white/10 transition-colors">
                   Estimate Project Budget

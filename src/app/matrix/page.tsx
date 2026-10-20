@@ -531,13 +531,13 @@ export default function MatrixPage() {
 
               {/* Consultation & Reset Buttons */}
               <div className="text-center pb-12">
-                <Link href="/#contact">
+                <a href="https://cal.id/nidhivandesignstudio-gmail" target="_blank" rel="noopener noreferrer">
                   <button 
                     className="bg-white text-black px-10 py-4 uppercase tracking-widest text-xs font-semibold hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10"
                   >
                     Book Consultation Call
                   </button>
-                </Link>
+                </a>
                 <button 
                   onClick={() => {
                     sessionStorage.clear();
