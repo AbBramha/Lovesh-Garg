@@ -1,3 +1,5 @@
+import projectsData from './projects.json';
+
 export interface Project {
   id: number;
   slug: string;
@@ -16,86 +18,4 @@ export interface Project {
   materials: string[];
 }
 
-export const projects: Project[] = [
-  {
-    id: 1,
-    slug: 'concrete-oasis',
-    title: 'Concrete Oasis',
-    subtitle: 'Subtropical Architecture Balanced with Modern Geometry',
-    category: 'Residential Estate',
-    location: 'Berlin, Germany',
-    area: '9,100 sq ft',
-    year: '2024',
-    status: 'Completed',
-    image: '/matrix/Tropical Modern.jpg',
-    gallery: [
-      '/matrix/Tropical Modern.jpg',
-      '/Landscape.png',
-      '/residential.png',
-      '/matrix/Q3_B Outdoors (Courtyard, shaded terrace).jpg'
-    ],
-    description: 'A bold synthesis of exposed concrete planes, deep cantilevered verandas, and lush cascading greenery. Concrete Oasis redefines sustainable estate living in a contemporary European context.',
-    concept: 'Designed around passive climate cooling and thermal mass, the house uses deep overhangs to shield interior living volumes from harsh summer heat while inviting soft filtered daylight all year round.',
-    highlights: [
-      'Green roof gardens integrated with rainwater catchment systems',
-      'Cantilevered swimming pool seamlessly aligned with the horizon',
-      'Deep verandas creating comfortable outdoor living zones',
-      'Locally sourced aggregate stone masonry'
-    ],
-    materials: ['Architectural Concrete', 'Local Sandstone', 'Reclaimed Hardwood', 'High-Performance Insulated Glazing']
-  },
-  {
-    id: 2,
-    slug: 'timber-retreat',
-    title: 'Timber Retreat',
-    subtitle: 'Alpine Modernism Grounded in Organic Warmth',
-    category: 'Nordic Residence',
-    location: 'Oslo, Norway',
-    area: '5,400 sq ft',
-    year: '2025',
-    status: 'Completed',
-    image: '/matrix/Warm & Inviting (Wood, textured surfaces, warm lighting).jpg',
-    gallery: [
-      '/matrix/Warm & Inviting (Wood, textured surfaces, warm lighting).jpg',
-      '/Interiors.png',
-      '/matrix/Japandi.jpg',
-      '/matrix/Q2_A Stone  Wood  Linen.jpg'
-    ],
-    description: 'Nestled into pine-covered hillsides, Timber Retreat is an ode to Nordic craftsmanship. Rich wood grain, volcanic stone, and expansive viewing portals frame breathtaking mountain horizons.',
-    concept: 'Constructed from sustainably harvested mass timber (CLT), the residence emits organic warmth and natural aroma. A grand dual-sided stone fireplace anchors the open-plan social space.',
-    highlights: [
-      'Mass timber structural frame with zero interior drywall',
-      'Full-height fireplace sculpted from monolithic granite boulders',
-      'Integrated sauna and cold plunge terrace overlooking the valley',
-      'Net-zero energy performance with integrated solar thermal'
-    ],
-    materials: ['Nordic Pine & Oak', 'Norwegian Granite', 'Hand-stitched Leather', 'Triple-Glazed Panoramic Glass']
-  },
-  {
-    id: 3,
-    slug: 'urban-light',
-    title: 'Urban Light',
-    subtitle: 'Volumetric Drama and Contemporary Parisian Sophistication',
-    category: 'Loft Penthouse',
-    location: 'Paris, France',
-    area: '6,800 sq ft',
-    year: '2025',
-    status: 'Completed',
-    image: '/matrix/Contemporary Luxury.jpg',
-    gallery: [
-      '/matrix/Contemporary Luxury.jpg',
-      '/commercial.png',
-      '/matrix/Bold & Dramatic.jpg',
-      '/matrix/Q2_C Marble + Wood + Brass.jpg'
-    ],
-    description: 'A dramatic double-height loft penthouse combining industrial Parisian heritage with contemporary luxury. Features soaring ceilings, curated art walls, and a master suite suspended above the main gallery.',
-    concept: 'Honoring the historic steel armature while introducing opulent Italian marbles and warm fluted timber, Urban Light is tailored for hosting art salons and high-end city living.',
-    highlights: [
-      'Double-height 22-foot living salon with floor-to-ceiling library',
-      'Curved sculptural brass staircase linking the private mezzanine',
-      'Custom wine cellar encased in climate-controlled fluted glass',
-      'Rooftop botanical garden overlooking the historic skyline'
-    ],
-    materials: ['Calacatta Gold Marble', 'Blackened Steel', 'Brushed Brass', 'Fluted Smoked Glass']
-  }
-];
+export const projects: Project[] = projectsData as Project[];

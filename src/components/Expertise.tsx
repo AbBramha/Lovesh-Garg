@@ -2,15 +2,15 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-
-const areas = [
-  { id: 'residential', title: 'Residential', image: '/residential.png' },
-  { id: 'commercial', title: 'Commercial', image: '/commercial.png' },
-  { id: 'interiors', title: 'Interiors', image: '/Interiors.png' },
-  { id: 'landscape', title: 'Landscape', image: '/Landscape.png' },
-];
+import siteContent from '@/data/siteContent.json';
 
 export default function Expertise() {
+  const areas = siteContent.expertise || [
+    { id: 'residential', title: 'Residential', image: '/residential.png' },
+    { id: 'commercial', title: 'Commercial', image: '/commercial.png' },
+    { id: 'interiors', title: 'Interiors', image: '/Interiors.png' },
+    { id: 'landscape', title: 'Landscape', image: '/Landscape.png' },
+  ];
   return (
     <section id="expertise" className="bg-black text-white">
       {areas.map((area, index) => (

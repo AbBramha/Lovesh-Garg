@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import siteContent from '@/data/siteContent.json';
 
 type ServiceType = 'Architecture' | 'Interior';
 type PropertyType = 'Independent House' | 'Apartment / Flat' | 'Commercial / Flat';
@@ -15,8 +16,8 @@ interface PackageRates {
   Interior: { sqft: number; sqm: number };
 }
 
-// Exact calculation rates from the brief
-const ratesTable: Record<PackageTier, PackageRates> = {
+// Calculation rates (sourced from centralized siteContent.json)
+const ratesTable: Record<PackageTier, PackageRates> = (siteContent.estimator?.rates as Record<PackageTier, PackageRates>) || {
   Essential: {
     Architecture: { sqft: 1300, sqm: 13988 },
     Interior: { sqft: 1200, sqm: 12912 }

@@ -1,10 +1,11 @@
 'use client';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-
 import Image from 'next/image';
+import siteContent from '@/data/siteContent.json';
 
 export default function Philosophy() {
+  const { philosophy } = siteContent;
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -23,7 +24,7 @@ export default function Philosophy() {
       >
         {/* Desktop Image */}
         <Image 
-          src="/Philosophy section.png"
+          src={philosophy.desktopImage || "/Philosophy section.png"}
           alt="Philosophy Background Desktop"
           fill
           quality={80}
@@ -31,7 +32,7 @@ export default function Philosophy() {
         />
         {/* Mobile Image */}
         <Image 
-          src="/Philosophy section 9-16.png"
+          src={philosophy.mobileImage || "/Philosophy section 9-16.png"}
           alt="Philosophy Background Mobile"
           fill
           quality={80}
@@ -49,28 +50,30 @@ export default function Philosophy() {
           >
             {/* Text Content - Blended on Mobile, Normal on Desktop */}
             <div className="mix-blend-difference md:mix-blend-normal text-white md:text-black">
-              <h2 className="text-xs md:text-sm tracking-[0.3em] uppercase font-semibold mb-4 text-white md:text-black">Philosophy</h2>
+              <h2 className="text-xs md:text-sm tracking-[0.3em] uppercase font-semibold mb-4 text-white md:text-black">
+                {philosophy.sectionTitle || "Philosophy"}
+              </h2>
               
               <p className="text-xl md:text-4xl lg:text-4xl font-light leading-snug text-white md:text-black">
-                Architecture is not just about spaces. It's about how we experience them.
+                {philosophy.heading}
               </p>
               
               <div className="mt-6 md:mt-8 w-12 md:w-16 h-[1px] bg-white md:bg-black"></div>
               
               <div className="mt-6 md:mt-8 text-sm md:text-base max-w-2xl font-light leading-relaxed space-y-3 md:space-y-4 text-white/90 md:text-black/80">
-                <p>
-                  At Nidhivan Design Studio, we believe that thoughtful architecture begins with understanding people, nature, and the spaces that connect them. Every design is an opportunity to create something meaningful, where form meets function and simplicity meets purpose.
-                </p>
-                <p>
-                  We strive to create timeless spaces that embrace natural light, respect their surroundings, and bring a sense of harmony to everyday life.
-                </p>
+                <p>{philosophy.paragraph1}</p>
+                {philosophy.paragraph2 && <p>{philosophy.paragraph2}</p>}
               </div>
             </div>
 
             {/* Architect Box - Untouched */}
             <div className="mt-8 md:mt-10 text-white font-light bg-black/80 backdrop-blur-lg border border-white/10 rounded-xl px-4 py-3 md:px-6 md:py-4 shadow-2xl w-fit">
-              <p className="uppercase tracking-widest text-[10px] md:text-xs mb-0.5 md:mb-1 text-white/80">Architect & Visionary</p>
-              <p className="text-base md:text-xl font-medium text-white">Mr. Lovesh Garg</p>
+              <p className="uppercase tracking-widest text-[10px] md:text-xs mb-0.5 md:mb-1 text-white/80">
+                {philosophy.architectTitle || "Architect & Visionary"}
+              </p>
+              <p className="text-base md:text-xl font-medium text-white">
+                {philosophy.architectName || "Mr. Lovesh Garg"}
+              </p>
             </div>
           </motion.div>
         </div>

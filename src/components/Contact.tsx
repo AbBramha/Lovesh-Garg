@@ -1,7 +1,10 @@
 'use client';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import siteContent from '@/data/siteContent.json';
 
 export default function Contact() {
+  const { contact } = siteContent;
   return (
     <section id="contact" className="relative min-h-[50vh] bg-black text-white flex items-end">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -39,25 +42,39 @@ export default function Contact() {
         <div className="w-full md:w-1/3 flex flex-col items-start md:items-end gap-6 text-white/80 font-light">
           <div className="text-left md:text-right">
             <h3 className="text-xs tracking-[0.3em] uppercase text-white font-semibold mb-4">Inquiries</h3>
-            <a href="mailto:loveshgarg@gmail.com" className="text-xl font-medium hover:text-white transition-colors block mb-2">loveshgarg@gmail.com</a>
-            <a href="tel:+919999710103" className="text-lg hover:text-white transition-colors block">+91 9999710103</a>
+            <a href={`mailto:${contact.inquiryEmail || "loveshgarg@gmail.com"}`} className="text-xl font-medium hover:text-white transition-colors block mb-2">
+              {contact.inquiryEmail || "loveshgarg@gmail.com"}
+            </a>
+            <a href={`tel:${(contact.inquiryPhone || "+91 9999710103").replace(/\s/g, '')}`} className="text-lg hover:text-white transition-colors block">
+              {contact.inquiryPhone || "+91 9999710103"}
+            </a>
           </div>
 
           <div className="text-left md:text-right mt-4">
             <h3 className="text-xs tracking-[0.3em] uppercase text-white font-semibold mb-4">Studio</h3>
-            <p className="text-sm leading-relaxed">
-              123 Design Avenue, 4th Floor<br/>
-              New Delhi, India 110001
+            <p className="text-sm leading-relaxed whitespace-pre-line">
+              {contact.studioAddress || "123 Design Avenue, 4th Floor\nNew Delhi, India 110001"}
             </p>
           </div>
 
           <div className="flex gap-6 text-xs uppercase tracking-widest mt-8 font-semibold">
-            <a href="https://www.instagram.com/nidhivan_design_studio?obrf=ZDUyYWxpaHFqdmo3" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
-            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-            <a href="https://wa.me/919999710103" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a>
+            {contact.instagram && (
+              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
+            )}
+            {contact.linkedin && contact.linkedin !== '#' && (
+              <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
+            )}
+            {contact.whatsapp && (
+              <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a>
+            )}
           </div>
           
-          <p className="mt-8 text-xs text-white/50 font-medium">© 2026 Ar. Lovesh Garg. All rights reserved.</p>
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-white/50 font-medium">
+            <p>{contact.copyright || "© 2026 Ar. Lovesh Garg. All rights reserved."}</p>
+            <Link href="/admin" className="text-white/20 hover:text-white/60 transition-colors tracking-widest uppercase text-[10px]">
+              Studio Portal
+            </Link>
+          </div>
         </div>
       </div>
     </section>

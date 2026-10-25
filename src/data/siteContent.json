@@ -1,0 +1,67 @@
+{
+  "hero": {
+    "headline": "Designing Spaces\nThat Feel Alive.",
+    "button1Text": "Find Your Design Style",
+    "button2Text": "Estimate Your Project",
+    "desktopVideo": "/Hero video 16-9.mp4",
+    "mobileVideo": "/Hero video  9-16.mp4"
+  },
+  "philosophy": {
+    "sectionTitle": "Philosophy",
+    "heading": "Architecture is not just about spaces. It's about how we experience them.",
+    "paragraph1": "At Nidhivan Design Studio, we believe that thoughtful architecture begins with understanding people, nature, and the spaces that connect them. Every design is an opportunity to create something meaningful, where form meets function and simplicity meets purpose.",
+    "paragraph2": "We strive to create timeless spaces that embrace natural light, respect their surroundings, and bring a sense of harmony to everyday life.",
+    "architectTitle": "Architect & Visionary",
+    "architectName": "Mr. Lovesh Garg",
+    "desktopImage": "/Philosophy section.png",
+    "mobileImage": "/Philosophy section 9-16.png"
+  },
+  "expertise": [
+    {
+      "id": "residential",
+      "title": "Residential",
+      "image": "/residential.png"
+    },
+    {
+      "id": "commercial",
+      "title": "Commercial",
+      "image": "/commercial.png"
+    },
+    {
+      "id": "interiors",
+      "title": "Interiors",
+      "image": "/Interiors.png"
+    },
+    {
+      "id": "landscape",
+      "title": "Landscape",
+      "image": "/Landscape.png"
+    }
+  ],
+  "estimator": {
+    "rates": {
+      "Essential": {
+        "Architecture": { "sqft": 1300, "sqm": 13988 },
+        "Interior": { "sqft": 1200, "sqm": 12912 }
+      },
+      "Premium": {
+        "Architecture": { "sqft": 1500, "sqm": 16140 },
+        "Interior": { "sqft": 1500, "sqm": 16140 }
+      },
+      "Luxury": {
+        "Architecture": { "sqft": 1500, "sqm": 16140 },
+        "Interior": { "sqft": 2200, "sqm": 23672 }
+      }
+    }
+  },
+  "contact": {
+    "inquiryEmail": "loveshgarg@gmail.com",
+    "inquiryPhone": "+91 9999710103",
+    "consultationLink": "https://cal.id/nidhivandesignstudio-gmail",
+    "studioAddress": "123 Design Avenue, 4th Floor\nNew Delhi, India 110001",
+    "instagram": "https://www.instagram.com/nidhivan_design_studio?obrf=ZDUyYWxpaHFqdmo3",
+    "whatsapp": "https://wa.me/919999710103",
+    "linkedin": "#",
+    "copyright": "© 2026 Ar. Lovesh Garg. All rights reserved."
+  }
+}
