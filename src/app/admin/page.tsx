@@ -62,7 +62,9 @@ interface SiteContent {
   hero: {
     headline: string;
     button1Text: string;
+    button1Link?: string;
     button2Text: string;
+    button2Link?: string;
     desktopVideo: string;
     mobileVideo: string;
   };
@@ -962,38 +964,86 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                    Primary CTA Button Text
-                  </label>
-                  <input
-                    type="text"
-                    value={siteContent.hero.button1Text}
-                    onChange={(e) =>
-                      setSiteContent({
-                        ...siteContent,
-                        hero: { ...siteContent.hero, button1Text: e.target.value }
-                      })
-                    }
-                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400/80"
-                  />
+                {/* Primary Button */}
+                <div className="bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                  <span className="text-xs uppercase tracking-widest text-amber-400 font-semibold block">
+                    Primary Hero Button
+                  </span>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-white/50 mb-1">
+                      Button Label
+                    </label>
+                    <input
+                      type="text"
+                      value={siteContent.hero.button1Text}
+                      onChange={(e) =>
+                        setSiteContent({
+                          ...siteContent,
+                          hero: { ...siteContent.hero, button1Text: e.target.value }
+                        })
+                      }
+                      placeholder="e.g. Find Your Design Style"
+                      className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-white/50 mb-1">
+                      Button Destination Link (Anchor or URL)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteContent.hero.button1Link || '#design-matrix'}
+                      onChange={(e) =>
+                        setSiteContent({
+                          ...siteContent,
+                          hero: { ...siteContent.hero, button1Link: e.target.value }
+                        })
+                      }
+                      placeholder="e.g. #design-matrix or /matrix"
+                      className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                    Secondary CTA Button Text
-                  </label>
-                  <input
-                    type="text"
-                    value={siteContent.hero.button2Text}
-                    onChange={(e) =>
-                      setSiteContent({
-                        ...siteContent,
-                        hero: { ...siteContent.hero, button2Text: e.target.value }
-                      })
-                    }
-                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400/80"
-                  />
+                {/* Secondary Button */}
+                <div className="bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                  <span className="text-xs uppercase tracking-widest text-white/70 font-semibold block">
+                    Secondary Hero Button
+                  </span>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-white/50 mb-1">
+                      Button Label
+                    </label>
+                    <input
+                      type="text"
+                      value={siteContent.hero.button2Text}
+                      onChange={(e) =>
+                        setSiteContent({
+                          ...siteContent,
+                          hero: { ...siteContent.hero, button2Text: e.target.value }
+                        })
+                      }
+                      placeholder="e.g. Estimate Your Project"
+                      className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-white/50 mb-1">
+                      Button Destination Link (Anchor or URL)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteContent.hero.button2Link || '#project-estimator'}
+                      onChange={(e) =>
+                        setSiteContent({
+                          ...siteContent,
+                          hero: { ...siteContent.hero, button2Link: e.target.value }
+                        })
+                      }
+                      placeholder="e.g. #project-estimator or /estimate"
+                      className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400 font-mono"
+                    />
+                  </div>
                 </div>
 
                 <div>

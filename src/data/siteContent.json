@@ -16,7 +16,9 @@
   "hero": {
     "headline": "Designing Spaces\nThat Feel Alive.",
     "button1Text": "Find Your Design Style",
+    "button1Link": "#design-matrix",
     "button2Text": "Estimate Your Project",
+    "button2Link": "#project-estimator",
     "desktopVideo": "/Hero video 16-9.mp4",
     "mobileVideo": "/Hero video  9-16.mp4"
   },

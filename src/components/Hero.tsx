@@ -59,12 +59,12 @@ export default function Hero() {
           transition={{ duration: 1, delay: 6.6 }}
           className="flex flex-col sm:flex-row items-start gap-2 md:gap-4 pointer-events-auto"
         >
-          <Link href="#design-matrix">
+          <Link href={(hero as any).button1Link || "#design-matrix"}>
             <button className="px-4 py-1.5 md:px-8 md:py-3 text-[11px] md:text-base bg-white text-black rounded md:rounded-lg font-medium tracking-wide hover:bg-neutral-200 transition-colors">
               {hero.button1Text || "Find Your Design Style"}
             </button>
           </Link>
-          <Link href="#project-estimator">
+          <Link href={(hero as any).button2Link || "#project-estimator"}>
             <button className="px-4 py-1.5 md:px-8 md:py-3 text-[11px] md:text-base border border-white text-white rounded md:rounded-lg font-medium tracking-wide hover:bg-white/10 transition-colors">
               {hero.button2Text || "Estimate Your Project"}
             </button>
