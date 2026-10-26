@@ -84,6 +84,17 @@ interface SiteContent {
     title: string;
     image: string;
   }>;
+  studio?: {
+    badge: string;
+    heading: string;
+    paragraph1: string;
+    paragraph2: string;
+    image: string;
+    stat1Value: string;
+    stat1Label: string;
+    stat2Value: string;
+    stat2Label: string;
+  };
   estimator: {
     rates: {
       Essential: {
@@ -1400,6 +1411,230 @@ export default function AdminPage() {
                 ))}
               </div>
             </div>
+
+            {/* THE STUDIO SECTION */}
+            {(() => {
+              const studioData = siteContent.studio || {
+                badge: 'The Studio',
+                heading: 'Designing with Context',
+                paragraph1: 'Founded on the principle that architecture should be a profound response to its environment, the studio focuses on creating spaces that harmonize with their surroundings.',
+                paragraph2: 'From the rugged landscapes of Ladakh to the dense urban fabric of modern cities, every project is an exploration of materiality, light, and human scale.',
+                image: '/5th section.png',
+                stat1Value: '15+',
+                stat1Label: 'Years Exp',
+                stat2Value: '40+',
+                stat2Label: 'Projects'
+              };
+
+              return (
+                <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+                  <div className="border-b border-white/5 pb-4">
+                    <h3 className="text-lg font-serif font-medium text-white">The Studio Section</h3>
+                    <p className="text-xs text-white/50 mt-0.5">
+                      Context-driven studio manifesto with featured photography and milestone metrics.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Pre-title Badge
+                      </label>
+                      <input
+                        type="text"
+                        value={studioData.badge}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            studio: { ...studioData, badge: e.target.value }
+                          })
+                        }
+                        placeholder="e.g. The Studio"
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Main Section Heading
+                      </label>
+                      <input
+                        type="text"
+                        value={studioData.heading}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            studio: { ...studioData, heading: e.target.value }
+                          })
+                        }
+                        placeholder="e.g. Designing with Context"
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Studio Narrative (Paragraph 1)
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={studioData.paragraph1}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            studio: { ...studioData, paragraph1: e.target.value }
+                          })
+                        }
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Studio Narrative (Paragraph 2)
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={studioData.paragraph2}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            studio: { ...studioData, paragraph2: e.target.value }
+                          })
+                        }
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    {/* Studio Image Uploader */}
+                    <div className="md:col-span-2 bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                      <label className="block text-xs uppercase tracking-widest text-white/70 font-semibold">
+                        Featured Studio Photography / On-site Visual
+                      </label>
+                      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        <div className="relative w-24 h-24 bg-neutral-900 rounded-lg overflow-hidden border border-white/10 shrink-0">
+                          {studioData.image ? (
+                            <Image src={studioData.image} alt="Studio Visual" fill className="object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white/20">
+                              <FiImage className="text-2xl" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 w-full flex gap-2">
+                          <input
+                            type="text"
+                            value={studioData.image}
+                            onChange={(e) =>
+                              setSiteContent({
+                                ...siteContent,
+                                studio: { ...studioData, image: e.target.value }
+                              })
+                            }
+                            placeholder="Image path e.g. /5th section.png"
+                            className="flex-1 bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                          <label className="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors">
+                            <FiUpload />
+                            <span>Replace Photo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = await handleFileUpload(file);
+                                  if (url) {
+                                    setSiteContent({
+                                      ...siteContent,
+                                      studio: { ...studioData, image: url }
+                                    });
+                                  }
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Milestone Stats */}
+                    <div className="bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                      <span className="text-xs uppercase tracking-widest text-amber-400 font-semibold block">
+                        Milestone Metric 1
+                      </span>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[10px] uppercase text-white/40 mb-1">Value (e.g. 15+)</label>
+                          <input
+                            type="text"
+                            value={studioData.stat1Value}
+                            onChange={(e) =>
+                              setSiteContent({
+                                ...siteContent,
+                                studio: { ...studioData, stat1Value: e.target.value }
+                              })
+                            }
+                            className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] uppercase text-white/40 mb-1">Label (e.g. Years Exp)</label>
+                          <input
+                            type="text"
+                            value={studioData.stat1Label}
+                            onChange={(e) =>
+                              setSiteContent({
+                                ...siteContent,
+                                studio: { ...studioData, stat1Label: e.target.value }
+                              })
+                            }
+                            className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                      <span className="text-xs uppercase tracking-widest text-amber-400 font-semibold block">
+                        Milestone Metric 2
+                      </span>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[10px] uppercase text-white/40 mb-1">Value (e.g. 40+)</label>
+                          <input
+                            type="text"
+                            value={studioData.stat2Value}
+                            onChange={(e) =>
+                              setSiteContent({
+                                ...siteContent,
+                                studio: { ...studioData, stat2Value: e.target.value }
+                              })
+                            }
+                            className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] uppercase text-white/40 mb-1">Label (e.g. Projects)</label>
+                          <input
+                            type="text"
+                            value={studioData.stat2Label}
+                            onChange={(e) =>
+                              setSiteContent({
+                                ...siteContent,
+                                studio: { ...studioData, stat2Label: e.target.value }
+                              })
+                            }
+                            className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* DESIGN MATRIX BANNER */}
             {matrixData?.banner && (

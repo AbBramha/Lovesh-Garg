@@ -54,6 +54,17 @@
       "image": "/Landscape.png"
     }
   ],
+  "studio": {
+    "badge": "The Studio",
+    "heading": "Designing with Context",
+    "paragraph1": "Founded on the principle that architecture should be a profound response to its environment, the studio focuses on creating spaces that harmonize with their surroundings.",
+    "paragraph2": "From the rugged landscapes of Ladakh to the dense urban fabric of modern cities, every project is an exploration of materiality, light, and human scale.",
+    "image": "/5th section.png",
+    "stat1Value": "15+",
+    "stat1Label": "Years Exp",
+    "stat2Value": "40+",
+    "stat2Label": "Projects"
+  },
   "estimator": {
     "rates": {
       "Essential": {
