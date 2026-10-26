@@ -90,9 +90,14 @@ interface SiteContent {
     inquiryPhone: string;
     consultationLink: string;
     studioAddress: string;
-    instagram: string;
-    whatsapp: string;
-    linkedin: string;
+    instagram?: string;
+    whatsapp?: string;
+    linkedin?: string;
+    socialLinks?: Array<{
+      id: string;
+      platform: string;
+      url: string;
+    }>;
     copyright: string;
   };
 }
@@ -333,6 +338,52 @@ export default function AdminPage() {
       const updatedList = projects.filter(p => p.id !== id);
       await saveProjects(updatedList);
     }
+  };
+
+  const handleAddSocialLink = () => {
+    if (!siteContent) return;
+    const current = siteContent.contact.socialLinks || [];
+    const newLink = {
+      id: Date.now().toString(),
+      platform: '',
+      url: ''
+    };
+    setSiteContent({
+      ...siteContent,
+      contact: {
+        ...siteContent.contact,
+        socialLinks: [...current, newLink]
+      }
+    });
+  };
+
+  const handleUpdateSocialLink = (index: number, field: 'platform' | 'url', value: string) => {
+    if (!siteContent) return;
+    const current = [...(siteContent.contact.socialLinks || [])];
+    current[index] = { ...current[index], [field]: value };
+    const updatedContact = { ...siteContent.contact, socialLinks: current };
+    if (current[index].platform.toLowerCase() === 'instagram') {
+      updatedContact.instagram = value;
+    }
+    if (current[index].platform.toLowerCase() === 'whatsapp') {
+      updatedContact.whatsapp = value;
+    }
+    setSiteContent({
+      ...siteContent,
+      contact: updatedContact
+    });
+  };
+
+  const handleRemoveSocialLink = (index: number) => {
+    if (!siteContent) return;
+    const current = (siteContent.contact.socialLinks || []).filter((_, i) => i !== index);
+    setSiteContent({
+      ...siteContent,
+      contact: {
+        ...siteContent.contact,
+        socialLinks: current
+      }
+    });
   };
 
   // ----------------------------------------------------
@@ -1206,114 +1257,169 @@ export default function AdminPage() {
         {/* TAB 4: CONTACT & SOCIALS */}
         {/* ======================================================== */}
         {activeTab === 'contact' && siteContent && (
-          <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
-            <div className="border-b border-white/5 pb-4">
-              <h3 className="text-lg font-serif font-medium text-white">Studio Inquiries & Social Channels</h3>
-              <p className="text-xs text-white/50 mt-0.5">Contact coordinates shown in the footer, consultation booking buttons, and direct messaging channels.</p>
+          <div className="space-y-8">
+            {/* DIRECT CONTACT COORDINATES */}
+            <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+              <div className="border-b border-white/5 pb-4">
+                <h3 className="text-lg font-serif font-medium text-white">Studio Inquiries & Booking Coordinates</h3>
+                <p className="text-xs text-white/50 mt-0.5">Primary email, studio phone, consultation calendar, and physical office address.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                    Direct Inquiry Email
+                  </label>
+                  <input
+                    type="email"
+                    value={siteContent.contact.inquiryEmail}
+                    onChange={(e) =>
+                      setSiteContent({
+                        ...siteContent,
+                        contact: { ...siteContent.contact, inquiryEmail: e.target.value }
+                      })
+                    }
+                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                    Inquiry Phone / Mobile
+                  </label>
+                  <input
+                    type="text"
+                    value={siteContent.contact.inquiryPhone}
+                    onChange={(e) =>
+                      setSiteContent({
+                        ...siteContent,
+                        contact: { ...siteContent.contact, inquiryPhone: e.target.value }
+                      })
+                    }
+                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                    Cal.com Online Booking Link
+                  </label>
+                  <input
+                    type="text"
+                    value={siteContent.contact.consultationLink}
+                    onChange={(e) =>
+                      setSiteContent({
+                        ...siteContent,
+                        contact: { ...siteContent.contact, consultationLink: e.target.value }
+                      })
+                    }
+                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                    Studio Physical Address
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={siteContent.contact.studioAddress}
+                    onChange={(e) =>
+                      setSiteContent({
+                        ...siteContent,
+                        contact: { ...siteContent.contact, studioAddress: e.target.value }
+                      })
+                    }
+                    className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                  Direct Inquiry Email
-                </label>
-                <input
-                  type="email"
-                  value={siteContent.contact.inquiryEmail}
-                  onChange={(e) =>
-                    setSiteContent({
-                      ...siteContent,
-                      contact: { ...siteContent.contact, inquiryEmail: e.target.value }
-                    })
-                  }
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                />
+            {/* DYNAMIC SOCIAL MEDIA & CUSTOM FOOTER LINKS */}
+            <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+                <div>
+                  <h3 className="text-lg font-serif font-medium text-white">Social Media & Custom Footer Links</h3>
+                  <p className="text-xs text-white/50 mt-0.5">
+                    Add any platform or custom web link (Instagram, WhatsApp, Pinterest, LinkedIn, YouTube, Behance, Google Maps). These render live across the website footer.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAddSocialLink}
+                  className="shrink-0 inline-flex items-center gap-2 px-3.5 py-2 bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 border border-amber-400/30 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  <FiPlus />
+                  <span>Add New Link</span>
+                </button>
               </div>
 
-              <div>
-                <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                  Inquiry Phone / Mobile
-                </label>
-                <input
-                  type="text"
-                  value={siteContent.contact.inquiryPhone}
-                  onChange={(e) =>
-                    setSiteContent({
-                      ...siteContent,
-                      contact: { ...siteContent.contact, inquiryPhone: e.target.value }
-                    })
-                  }
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                />
-              </div>
+              {(!siteContent.contact.socialLinks || siteContent.contact.socialLinks.length === 0) ? (
+                <div className="text-center py-8 border border-dashed border-white/10 rounded-xl text-white/40 text-xs">
+                  No social or external links added yet. Click &quot;Add New Link&quot; above to add your first channel.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {siteContent.contact.socialLinks.map((item, index) => (
+                    <div
+                      key={item.id || index}
+                      className="bg-[#181818] border border-white/5 rounded-xl p-3.5 flex flex-col md:flex-row items-stretch md:items-center gap-3 transition-colors hover:border-white/10"
+                    >
+                      <div className="w-full md:w-1/3">
+                        <label className="block text-[10px] uppercase tracking-widest text-white/40 mb-1">
+                          Platform / Title
+                        </label>
+                        <input
+                          type="text"
+                          value={item.platform}
+                          onChange={(e) => handleUpdateSocialLink(index, 'platform', e.target.value)}
+                          placeholder="e.g. Pinterest, LinkedIn, YouTube"
+                          className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
 
-              <div>
-                <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                  WhatsApp Direct Link (e.g. https://wa.me/919999710103)
-                </label>
-                <input
-                  type="text"
-                  value={siteContent.contact.whatsapp}
-                  onChange={(e) =>
-                    setSiteContent({
-                      ...siteContent,
-                      contact: { ...siteContent.contact, whatsapp: e.target.value }
-                    })
-                  }
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                />
-              </div>
+                      <div className="flex-1">
+                        <label className="block text-[10px] uppercase tracking-widest text-white/40 mb-1">
+                          Destination URL
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={item.url}
+                            onChange={(e) => handleUpdateSocialLink(index, 'url', e.target.value)}
+                            placeholder="e.g. https://pinterest.com/nidhivandesign"
+                            className="flex-1 bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                          {item.url && item.url.startsWith('http') && (
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-2.5 py-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white rounded-lg text-xs flex items-center justify-center transition-colors"
+                              title="Test link"
+                            >
+                              <FiExternalLink />
+                            </a>
+                          )}
+                        </div>
+                      </div>
 
-              <div>
-                <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                  Instagram Profile URL
-                </label>
-                <input
-                  type="text"
-                  value={siteContent.contact.instagram}
-                  onChange={(e) =>
-                    setSiteContent({
-                      ...siteContent,
-                      contact: { ...siteContent.contact, instagram: e.target.value }
-                    })
-                  }
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                  Cal.com Online Booking Link
-                </label>
-                <input
-                  type="text"
-                  value={siteContent.contact.consultationLink}
-                  onChange={(e) =>
-                    setSiteContent({
-                      ...siteContent,
-                      contact: { ...siteContent.contact, consultationLink: e.target.value }
-                    })
-                  }
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                  Studio Physical Address
-                </label>
-                <textarea
-                  rows={2}
-                  value={siteContent.contact.studioAddress}
-                  onChange={(e) =>
-                    setSiteContent({
-                      ...siteContent,
-                      contact: { ...siteContent.contact, studioAddress: e.target.value }
-                    })
-                  }
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                />
-              </div>
+                      <div className="shrink-0 flex items-end md:self-end pt-2 md:pt-0">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSocialLink(index)}
+                          className="w-full md:w-auto p-2 bg-red-950/30 hover:bg-red-950/60 text-red-400 border border-red-500/20 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                          title="Delete link"
+                        >
+                          <FiTrash2 />
+                          <span className="md:hidden">Remove</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

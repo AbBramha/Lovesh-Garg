@@ -62,6 +62,23 @@
     "instagram": "https://www.instagram.com/nidhivan_design_studio?obrf=ZDUyYWxpaHFqdmo3",
     "whatsapp": "https://wa.me/919999710103",
     "linkedin": "#",
+    "socialLinks": [
+      {
+        "id": "instagram",
+        "platform": "Instagram",
+        "url": "https://www.instagram.com/nidhivan_design_studio?obrf=ZDUyYWxpaHFqdmo3"
+      },
+      {
+        "id": "whatsapp",
+        "platform": "WhatsApp",
+        "url": "https://wa.me/919999710103"
+      },
+      {
+        "id": "linkedin",
+        "platform": "LinkedIn",
+        "url": "#"
+      }
+    ],
     "copyright": "© 2026 Ar. Lovesh Garg. All rights reserved."
   }
 }

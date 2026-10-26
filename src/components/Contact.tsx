@@ -57,15 +57,34 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="flex gap-6 text-xs uppercase tracking-widest mt-8 font-semibold">
-            {contact.instagram && (
-              <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
-            )}
-            {contact.linkedin && contact.linkedin !== '#' && (
-              <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
-            )}
-            {contact.whatsapp && (
-              <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">WhatsApp</a>
+          <div className="flex flex-wrap gap-6 text-xs uppercase tracking-widest mt-8 font-semibold">
+            {Array.isArray((contact as any).socialLinks) && (contact as any).socialLinks.length > 0 ? (
+              (contact as any).socialLinks.map((item: any) => {
+                if (!item.url || item.url === '#') return null;
+                return (
+                  <a
+                    key={item.id || item.platform}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-amber-400 transition-colors"
+                  >
+                    {item.platform}
+                  </a>
+                );
+              })
+            ) : (
+              <>
+                {contact.instagram && (
+                  <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">Instagram</a>
+                )}
+                {contact.linkedin && contact.linkedin !== '#' && (
+                  <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">LinkedIn</a>
+                )}
+                {contact.whatsapp && (
+                  <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-amber-400 transition-colors">WhatsApp</a>
+                )}
+              </>
             )}
           </div>
           
