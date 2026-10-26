@@ -955,9 +955,7 @@ export default function AdminPage() {
                   { id: 'matrix', label: 'Matrix', href: '/#design-matrix' },
                   { id: 'estimator', label: 'Estimator', href: '/#project-estimator' },
                   { id: 'contact', label: 'Contact', href: '/#contact' }
-                ],
-                ctaText: 'Estimate Project',
-                ctaLink: '/estimate'
+                ]
               };
 
               return (
@@ -1057,42 +1055,6 @@ export default function AdminPage() {
                           })
                         }
                         placeholder="e.g. Design Studio"
-                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                        Header CTA Button Label (Optional)
-                      </label>
-                      <input
-                        type="text"
-                        value={headerData.ctaText || ''}
-                        onChange={(e) =>
-                          setSiteContent({
-                            ...siteContent,
-                            header: { ...headerData, ctaText: e.target.value }
-                          })
-                        }
-                        placeholder="e.g. Estimate Project (Leave empty to hide)"
-                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
-                        Header CTA Destination Link
-                      </label>
-                      <input
-                        type="text"
-                        value={headerData.ctaLink || ''}
-                        onChange={(e) =>
-                          setSiteContent({
-                            ...siteContent,
-                            header: { ...headerData, ctaLink: e.target.value }
-                          })
-                        }
-                        placeholder="e.g. /estimate or /#contact"
                         className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
                       />
                     </div>

@@ -67,8 +67,8 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center gap-8">
-          <nav className={`flex items-center gap-7 text-xs font-medium tracking-widest uppercase transition-colors duration-300 ${scrolled ? 'text-black/70' : 'text-white/80'}`}>
+        <div className="hidden md:flex items-center">
+          <nav className={`flex items-center gap-8 text-xs font-medium tracking-widest uppercase transition-colors duration-300 ${scrolled ? 'text-black/70' : 'text-white/80'}`}>
             {(header.navLinks || []).map((link: any) => (
               <Link 
                 key={link.id || link.href} 
@@ -79,19 +79,6 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-
-          {header.ctaText && (
-            <Link
-              href={header.ctaLink || '/estimate'}
-              className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all shadow-sm ${
-                scrolled
-                  ? 'bg-black text-white hover:bg-neutral-800'
-                  : 'bg-white text-black hover:bg-amber-400'
-              }`}
-            >
-              {header.ctaText}
-            </Link>
-          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -136,15 +123,6 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              {header.ctaText && (
-                <Link
-                  href={header.ctaLink || '/estimate'}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="mt-2 text-center py-2.5 bg-amber-400 text-black rounded-lg font-bold text-xs uppercase tracking-wider"
-                >
-                  {header.ctaText}
-                </Link>
-              )}
             </nav>
           </motion.div>
         )}

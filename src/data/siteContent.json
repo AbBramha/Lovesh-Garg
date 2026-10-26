@@ -9,9 +9,7 @@
       { "id": "matrix", "label": "Matrix", "href": "/#design-matrix" },
       { "id": "estimator", "label": "Estimator", "href": "/#project-estimator" },
       { "id": "contact", "label": "Contact", "href": "/#contact" }
-    ],
-    "ctaText": "Estimate Project",
-    "ctaLink": "/estimate"
+    ]
   },
   "hero": {
     "headline": "Designing Spaces\nThat Feel Alive.",
