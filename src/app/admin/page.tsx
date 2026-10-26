@@ -345,8 +345,18 @@ export default function AdminPage() {
           <div className="absolute -top-24 -right-24 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-white/5 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="relative text-center mb-8">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-amber-400 font-semibold mb-2 block">
+          <div className="relative text-center mb-8 flex flex-col items-center">
+            <div className="relative w-16 h-12 mb-3">
+              <Image
+                src="/logo-white-transparent.png"
+                alt="Nidhivan Design Studio Logo"
+                fill
+                sizes="64px"
+                className="object-contain"
+                priority
+              />
+            </div>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-amber-400 font-semibold mb-1 block">
               Architectural Portal
             </span>
             <h1 className="text-2xl md:text-3xl font-serif tracking-tight font-medium text-white mb-2">
@@ -465,10 +475,16 @@ export default function AdminPage() {
       <header className="sticky top-0 z-40 bg-[#0c0c0c]/90 backdrop-blur-md border-b border-white/10 px-6 py-4">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Link href="/" className="group flex items-center gap-3">
-              <span className="w-8 h-8 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 font-serif font-bold text-sm">
-                N
-              </span>
+            <Link href="/" className="group flex items-center gap-3.5">
+              <div className="relative w-11 h-9 shrink-0 overflow-hidden">
+                <Image
+                  src="/logo-white-transparent.png"
+                  alt="Nidhivan Design Studio Logo"
+                  fill
+                  sizes="48px"
+                  className="object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
               <div>
                 <h1 className="text-sm font-serif tracking-wider font-semibold text-white group-hover:text-amber-300 transition-colors">
                   NIDHIVAN DESIGN STUDIO
