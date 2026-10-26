@@ -65,6 +65,27 @@
     "stat2Value": "40+",
     "stat2Label": "Projects"
   },
+  "testimonials": [
+    {
+      "id": "1",
+      "text": "He doesn't just design buildings; he curates an entire experience of living.",
+      "client": "Sarah J., Residential Client",
+      "bg": "/6th section.png"
+    },
+    {
+      "id": "2",
+      "text": "A masterful balance of raw materiality and sublime elegance.",
+      "client": "Design Digest",
+      "bg": "/ChatGPT Image Aug 4, 2026, 03_12_09 PM.png"
+    }
+  ],
+  "footer": {
+    "heading": "Let's Talk.",
+    "submitButtonText": "Submit",
+    "desktopBackground": "/Footer.png",
+    "mobileBackground": "/mobile footer.png",
+    "copyright": "© 2026 Ar. Lovesh Garg. All rights reserved."
+  },
   "estimator": {
     "rates": {
       "Essential": {

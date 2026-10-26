@@ -5,6 +5,19 @@ import siteContent from '@/data/siteContent.json';
 
 export default function Contact() {
   const { contact } = siteContent;
+  const footer = (siteContent as any).footer || {};
+
+  const getCleanBgUrl = (bgPath: string, fallback: string) => {
+    const raw = bgPath || fallback;
+    return encodeURI(decodeURI(raw));
+  };
+
+  const desktopBg = getCleanBgUrl(footer.desktopBackground, '/Footer.png');
+  const mobileBg = getCleanBgUrl(footer.mobileBackground, '/mobile footer.png');
+  const headingText = footer.heading || "Let's Talk.";
+  const submitText = footer.submitButtonText || "Submit";
+  const copyrightText = footer.copyright || (contact as any).copyright || "© 2026 Ar. Lovesh Garg. All rights reserved.";
+
   return (
     <section id="contact" className="relative min-h-[50vh] bg-black text-white flex items-end">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -15,7 +28,7 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 1.5 }}
           className="w-full h-full bg-cover bg-center hidden md:block"
-          style={{ backgroundImage: "url('/Footer.png')" }}
+          style={{ backgroundImage: `url("${desktopBg}")` }}
         ></motion.div>
         {/* Mobile Footer Background */}
         <motion.div 
@@ -24,18 +37,20 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 1.5 }}
           className="w-full h-full bg-cover bg-center md:hidden"
-          style={{ backgroundImage: "url('/mobile footer.png')" }}
+          style={{ backgroundImage: `url("${mobileBg}")` }}
         ></motion.div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10 pb-10 pt-16 flex flex-col md:flex-row justify-between items-end gap-8">
         <div className="w-full md:w-1/2">
-          <h2 className="text-5xl md:text-8xl font-light mb-8">Let's Talk.</h2>
+          <h2 className="text-5xl md:text-8xl font-light mb-8">{headingText}</h2>
           <form className="flex flex-col gap-6 max-w-md">
             <input type="text" placeholder="Name" className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-white placeholder-white/50 transition-colors" />
             <input type="email" placeholder="Email" className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-white placeholder-white/50 transition-colors" />
             <textarea placeholder="Tell us about your project" rows={3} className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-white placeholder-white/50 transition-colors resize-none"></textarea>
-            <button type="submit" className="self-start mt-4 border border-white px-8 py-4 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-white hover:text-black transition-colors">Submit</button>
+            <button type="submit" className="self-start mt-4 border border-white px-8 py-4 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-white hover:text-black transition-colors">
+              {submitText}
+            </button>
           </form>
         </div>
 
@@ -89,7 +104,7 @@ export default function Contact() {
           </div>
           
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-white/50 font-medium">
-            <p>{contact.copyright || "© 2026 Ar. Lovesh Garg. All rights reserved."}</p>
+            <p>{copyrightText}</p>
             <Link href="/admin" className="text-white/20 hover:text-white/60 transition-colors tracking-widest uppercase text-[10px]">
               Studio Portal
             </Link>

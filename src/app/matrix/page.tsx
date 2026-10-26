@@ -22,9 +22,17 @@ interface Question {
   endNote: string;
 }
 
-const questions: Question[] = (matrixData.questions as Question[]);
+interface StyleDetails {
+  subtitle: string;
+  description: string;
+  materials: string[];
+  spatialVibe: string;
+  [key: string]: any;
+}
+
+const questions: Question[] = (matrixData.questions as unknown as Question[]);
 const resultImages: Record<string, string> = (matrixData.resultImages as Record<string, string>);
-const styleDetails: Record<string, StyleDetails> = (matrixData.styleDetails as Record<string, StyleDetails>);
+const styleDetails: Record<string, StyleDetails> = (matrixData.styleDetails as unknown as Record<string, StyleDetails>);
 
 export default function MatrixPage() {
   const [mounted, setMounted] = useState(false);
@@ -268,7 +276,7 @@ export default function MatrixPage() {
                         Key Materials & Language
                       </span>
                       <div className="flex flex-wrap gap-2">
-                        {styleDetails[results.primary]?.materials.map((mat, idx) => (
+                        {styleDetails[results.primary]?.materials.map((mat: string, idx: number) => (
                           <span key={idx} className="text-xs px-2.5 py-1 bg-white/5 border border-white/10 text-white/80 rounded-sm">
                             {mat}
                           </span>
@@ -322,7 +330,7 @@ export default function MatrixPage() {
                   {/* Materials & Spatial Note */}
                   <div className="pt-3 border-t border-white/10">
                     <div className="flex flex-wrap gap-1.5 mb-2">
-                      {styleDetails[results.secondary]?.materials.slice(0, 3).map((mat, idx) => (
+                      {styleDetails[results.secondary]?.materials.slice(0, 3).map((mat: string, idx: number) => (
                         <span key={idx} className="text-[10px] px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded-sm">
                           {mat}
                         </span>
@@ -370,7 +378,7 @@ export default function MatrixPage() {
                   {/* Materials & Spatial Note */}
                   <div className="pt-3 border-t border-white/10">
                     <div className="flex flex-wrap gap-1.5 mb-2">
-                      {styleDetails[results.supporting]?.materials.slice(0, 3).map((mat, idx) => (
+                      {styleDetails[results.supporting]?.materials.slice(0, 3).map((mat: string, idx: number) => (
                         <span key={idx} className="text-[10px] px-2 py-0.5 bg-white/5 border border-white/10 text-white/70 rounded-sm">
                           {mat}
                         </span>

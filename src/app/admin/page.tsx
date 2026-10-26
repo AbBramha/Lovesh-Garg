@@ -95,6 +95,19 @@ interface SiteContent {
     stat2Value: string;
     stat2Label: string;
   };
+  testimonials?: Array<{
+    id?: string;
+    text: string;
+    client: string;
+    bg: string;
+  }>;
+  footer?: {
+    heading: string;
+    submitButtonText: string;
+    desktopBackground: string;
+    mobileBackground: string;
+    copyright?: string;
+  };
   estimator: {
     rates: {
       Essential: {
@@ -676,11 +689,16 @@ export default function AdminPage() {
 
           {activeTab !== 'projects' && (
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (activeTab === 'matrix') {
-                  saveMatrixData();
+                  await saveMatrixData();
+                } else if (activeTab === 'homepage') {
+                  await saveSiteContent();
+                  if (matrixData) {
+                    await saveMatrixData();
+                  }
                 } else {
-                  saveSiteContent();
+                  await saveSiteContent();
                 }
               }}
               disabled={isSaving}
@@ -1723,6 +1741,375 @@ export default function AdminPage() {
                 </div>
               </div>
             )}
+
+            {/* REVIEWS / TESTIMONIALS SECTION */}
+            {(() => {
+              const testimonialsList = siteContent.testimonials || [
+                {
+                  id: "1",
+                  text: "He doesn't just design buildings; he curates an entire experience of living.",
+                  client: "Sarah J., Residential Client",
+                  bg: "/6th%20section.png"
+                },
+                {
+                  id: "2",
+                  text: "A masterful balance of raw materiality and sublime elegance.",
+                  client: "Design Digest",
+                  bg: "/ChatGPT%20Image%20Aug%204,%202026,%2003_12_09%20PM.png"
+                }
+              ];
+
+              const updateTestimonial = (index: number, updatedItem: any) => {
+                const updated = [...testimonialsList];
+                updated[index] = updatedItem;
+                setSiteContent({
+                  ...siteContent,
+                  testimonials: updated
+                });
+              };
+
+              const addTestimonial = () => {
+                const newId = Date.now().toString();
+                const updated = [
+                  ...testimonialsList,
+                  {
+                    id: newId,
+                    text: "New client review quote here...",
+                    client: "Client Name, Project Type",
+                    bg: "/6th section.png"
+                  }
+                ];
+                setSiteContent({
+                  ...siteContent,
+                  testimonials: updated
+                });
+              };
+
+              const removeTestimonial = (index: number) => {
+                if (testimonialsList.length <= 1) {
+                  showToast('At least one review is required', 'error');
+                  return;
+                }
+                const updated = testimonialsList.filter((_, i) => i !== index);
+                setSiteContent({
+                  ...siteContent,
+                  testimonials: updated
+                });
+              };
+
+              return (
+                <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+                    <div>
+                      <h3 className="text-lg font-serif font-medium text-white">Client Reviews & Testimonials</h3>
+                      <p className="text-xs text-white/50 mt-0.5">
+                        Full-screen carousel showcasing architectural testimonials, client endorsements, and atmospheric backdrop photos.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addTestimonial}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-semibold shrink-0 transition-colors cursor-pointer"
+                    >
+                      <FiPlus className="text-sm" />
+                      <span>Add New Review</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {testimonialsList.map((item, idx) => (
+                      <div key={item.id || idx} className="bg-[#181818] border border-white/5 rounded-xl p-5 space-y-4">
+                        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+                          <span className="text-xs uppercase tracking-widest text-amber-400 font-semibold">
+                            Review #{idx + 1}
+                          </span>
+                          {testimonialsList.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeTestimonial(idx)}
+                              className="text-red-400/80 hover:text-red-400 text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                              title="Delete this review"
+                            >
+                              <FiTrash2 className="text-xs" />
+                              <span>Remove</span>
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="md:col-span-2">
+                            <label className="block text-xs uppercase tracking-widest text-white/60 mb-1.5">
+                              Quote / Review Statement
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={item.text}
+                              onChange={(e) => updateTestimonial(idx, { ...item, text: e.target.value })}
+                              placeholder="e.g. He doesn't just design buildings; he curates an entire experience of living."
+                              className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+
+                          <div className="md:col-span-2">
+                            <label className="block text-xs uppercase tracking-widest text-white/60 mb-1.5">
+                              Client / Endorsement Attribution
+                            </label>
+                            <input
+                              type="text"
+                              value={item.client}
+                              onChange={(e) => updateTestimonial(idx, { ...item, client: e.target.value })}
+                              placeholder="e.g. Sarah J., Residential Client or Architectural Digest"
+                              className="w-full bg-[#121212] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+
+                          {/* Background Photo Uploader */}
+                          <div className="md:col-span-2 bg-[#121212] p-4 rounded-xl border border-white/5 space-y-3">
+                            <label className="block text-xs uppercase tracking-widest text-white/70 font-semibold">
+                              Atmospheric Background Photo
+                            </label>
+                            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                              <div className="relative w-24 h-16 bg-neutral-900 rounded-lg overflow-hidden border border-white/10 shrink-0">
+                                {item.bg ? (
+                                  <Image
+                                    src={item.bg}
+                                    alt={`Review ${idx + 1} Visual`}
+                                    fill
+                                    sizes="96px"
+                                    className="object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-white/20">
+                                    <FiImage className="text-xl" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 w-full flex gap-2">
+                                <input
+                                  type="text"
+                                  value={item.bg}
+                                  onChange={(e) => updateTestimonial(idx, { ...item, bg: e.target.value })}
+                                  placeholder="Image path e.g. /6th section.png"
+                                  className="flex-1 bg-[#181818] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                                />
+                                <label className="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors">
+                                  <FiUpload />
+                                  <span>Replace Photo</span>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) {
+                                        const url = await handleFileUpload(file);
+                                        if (url) {
+                                          updateTestimonial(idx, { ...item, bg: url });
+                                        }
+                                      }
+                                    }}
+                                  />
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* FOOTER & CONTACT FORM SECTION */}
+            {(() => {
+              const footerData = siteContent.footer || {
+                heading: "Let's Talk.",
+                submitButtonText: "Submit",
+                desktopBackground: "/Footer.png",
+                mobileBackground: "/mobile footer.png",
+                copyright: "© 2026 Ar. Lovesh Garg. All rights reserved."
+              };
+
+              const updateFooter = (fields: Partial<typeof footerData>) => {
+                setSiteContent({
+                  ...siteContent,
+                  footer: { ...footerData, ...fields }
+                });
+              };
+
+              return (
+                <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+                  <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                    <div>
+                      <h3 className="text-lg font-serif font-medium text-white">Website Footer & Contact Section</h3>
+                      <p className="text-xs text-white/50 mt-0.5">
+                        Bottom inquiry form headline, submit action button, desktop & mobile backdrop artwork, and studio copyright notice.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Form Headline Text
+                      </label>
+                      <input
+                        type="text"
+                        value={footerData.heading}
+                        onChange={(e) => updateFooter({ heading: e.target.value })}
+                        placeholder="e.g. Let's Talk."
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Submit Button Text
+                      </label>
+                      <input
+                        type="text"
+                        value={footerData.submitButtonText}
+                        onChange={(e) => updateFooter({ submitButtonText: e.target.value })}
+                        placeholder="e.g. Submit"
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Copyright Notice Line
+                      </label>
+                      <input
+                        type="text"
+                        value={footerData.copyright || ''}
+                        onChange={(e) => updateFooter({ copyright: e.target.value })}
+                        placeholder="e.g. © 2026 Ar. Lovesh Garg. All rights reserved."
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    {/* Desktop Footer Background Uploader */}
+                    <div className="bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                      <label className="block text-xs uppercase tracking-widest text-white/70 font-semibold">
+                        Desktop Footer Background Artwork
+                      </label>
+                      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        <div className="relative w-20 h-16 bg-neutral-900 rounded-lg overflow-hidden border border-white/10 shrink-0">
+                          {footerData.desktopBackground ? (
+                            <Image
+                              src={footerData.desktopBackground}
+                              alt="Desktop Footer Artwork"
+                              fill
+                              sizes="80px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white/20">
+                              <FiImage className="text-xl" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 w-full flex gap-2">
+                          <input
+                            type="text"
+                            value={footerData.desktopBackground}
+                            onChange={(e) => updateFooter({ desktopBackground: e.target.value })}
+                            placeholder="e.g. /Footer.png"
+                            className="flex-1 bg-[#121212] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                          <label className="px-3 py-2 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs cursor-pointer flex items-center gap-1 shrink-0 transition-colors">
+                            <FiUpload />
+                            <span>Upload</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = await handleFileUpload(file);
+                                  if (url) {
+                                    updateFooter({ desktopBackground: url });
+                                  }
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Mobile Footer Background Uploader */}
+                    <div className="bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                      <label className="block text-xs uppercase tracking-widest text-white/70 font-semibold">
+                        Mobile Footer Background Artwork
+                      </label>
+                      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        <div className="relative w-20 h-16 bg-neutral-900 rounded-lg overflow-hidden border border-white/10 shrink-0">
+                          {footerData.mobileBackground ? (
+                            <Image
+                              src={footerData.mobileBackground}
+                              alt="Mobile Footer Artwork"
+                              fill
+                              sizes="80px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white/20">
+                              <FiImage className="text-xl" />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 w-full flex gap-2">
+                          <input
+                            type="text"
+                            value={footerData.mobileBackground}
+                            onChange={(e) => updateFooter({ mobileBackground: e.target.value })}
+                            placeholder="e.g. /mobile footer.png"
+                            className="flex-1 bg-[#121212] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                          <label className="px-3 py-2 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs cursor-pointer flex items-center gap-1 shrink-0 transition-colors">
+                            <FiUpload />
+                            <span>Upload</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = await handleFileUpload(file);
+                                  if (url) {
+                                    updateFooter({ mobileBackground: url });
+                                  }
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Bottom Publish Bar */}
+            <div className="flex items-center justify-end pt-4 pb-12">
+              <button
+                type="button"
+                onClick={async () => {
+                  saveSiteContent();
+                  if (matrixData) saveMatrixData();
+                }}
+                disabled={isSaving}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black rounded-xl text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer shadow-lg shadow-amber-500/10 disabled:opacity-50"
+              >
+                <FiSave />
+                <span>{isSaving ? 'Publishing Changes...' : 'Publish Homepage Sections'}</span>
+              </button>
+            </div>
           </div>
         )}
 
