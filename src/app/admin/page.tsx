@@ -23,6 +23,8 @@ import {
   FiAlertCircle,
   FiCheckCircle,
   FiEye,
+  FiEyeOff,
+  FiMail,
   FiArrowLeft
 } from 'react-icons/fi';
 
@@ -97,7 +99,9 @@ interface SiteContent {
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -151,14 +155,14 @@ export default function AdminPage() {
       const res = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ email, password })
       });
       const data = await res.json();
       if (res.ok && data.success) {
         setIsAuthenticated(true);
         loadDashboardData();
       } else {
-        setAuthError(data.message || 'Invalid passcode');
+        setAuthError(data.message || 'Invalid email or passcode');
       }
     } catch (err: any) {
       setAuthError('Authentication request failed');
@@ -170,6 +174,7 @@ export default function AdminPage() {
   const handleLogout = async () => {
     await fetch('/api/admin/auth', { method: 'DELETE' });
     setIsAuthenticated(false);
+    setEmail('');
     setPassword('');
   };
 
@@ -352,21 +357,47 @@ export default function AdminPage() {
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6 relative">
+          <form onSubmit={handleLogin} className="space-y-5 relative">
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-white/60 font-medium mb-2">
+                Studio Admin Email
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="e.g. loveshgarg@gmail.com"
+                  required
+                  autoComplete="email"
+                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-amber-400/80 transition-all duration-200 pr-12"
+                />
+                <FiMail className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40" />
+              </div>
+            </div>
+
             <div>
               <label className="block text-xs uppercase tracking-widest text-white/60 font-medium mb-2">
                 Studio Passcode
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter studio access password"
+                  placeholder="Enter studio access passcode"
                   required
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-amber-400/80 transition-all duration-200"
+                  autoComplete="current-password"
+                  className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-amber-400/80 transition-all duration-200 pr-12"
                 />
-                <FiLock className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors cursor-pointer"
+                  title={showPassword ? "Hide passcode" : "Show passcode"}
+                >
+                  {showPassword ? <FiEyeOff className="text-base" /> : <FiEye className="text-base" />}
+                </button>
               </div>
             </div>
 

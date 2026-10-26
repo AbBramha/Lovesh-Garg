@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+const DEFAULT_ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'loveshgarg@gmail.com';
 const DEFAULT_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'nidhivan2026';
 
 export async function POST(req: Request) {
   try {
-    const { password } = await req.json();
+    const { email, password } = await req.json();
 
-    if (password === DEFAULT_ADMIN_PASSWORD) {
+    const isEmailValid = email && email.toLowerCase().trim() === DEFAULT_ADMIN_EMAIL.toLowerCase().trim();
+    const isPasswordValid = password === DEFAULT_ADMIN_PASSWORD;
+
+    if (isEmailValid && isPasswordValid) {
       const cookieStore = await cookies();
       cookieStore.set('nidhivan_admin_session', 'authenticated', {
         httpOnly: true,
@@ -20,7 +24,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: 'Authenticated successfully' });
     }
 
-    return NextResponse.json({ success: false, message: 'Invalid password' }, { status: 401 });
+    return NextResponse.json({ success: false, message: 'Invalid studio email or passcode' }, { status: 401 });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
