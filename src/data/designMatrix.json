@@ -1,0 +1,305 @@
+{
+  "banner": {
+    "headline": "Discover the design language that feels like you.",
+    "quote": "“Architecture is more than choosing a style. It is about how you want to feel, live, interact and experience a space.”",
+    "badge": "5 questions · 60 seconds · Discover your Design Matrix",
+    "buttonText": "Start Experience",
+    "buttonLink": "/matrix"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "title": "What kind of space draws you in?",
+      "subtitle": "Imagine these spaces. Which ones would you most enjoy coming home to? (Choose up to 2 options)",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "1A",
+          "label": "Calm & Refined",
+          "desc": "Clean lines, uncluttered surfaces, neutral colours and soft natural light.",
+          "img": "/matrix/Calm & Refined (Clean lines, neutral colours).jpg",
+          "scores": { "Modern Minimal": 3, "Modern Style": 1 }
+        },
+        {
+          "id": "1B",
+          "label": "Warm & Inviting",
+          "desc": "Wood, textured surfaces, warm lighting and comfortable, welcoming spaces.",
+          "img": "/matrix/Warm & Inviting (Wood, textured surfaces, warm lighting).jpg",
+          "scores": { "Japandi": 3, "Contemporary Indian": 1 }
+        },
+        {
+          "id": "1C",
+          "label": "Bold & Dramatic",
+          "desc": "Strong geometry, statement materials, dramatic lighting and a sense of grandeur.",
+          "img": "/matrix/Bold & Dramatic.jpg",
+          "scores": { "Contemporary Luxury": 3, "Neo Classical": 1, "Classical Indian": 1 }
+        },
+        {
+          "id": "1D",
+          "label": "Connected to Nature & Deeply Relaxing",
+          "desc": "Natural materials, greenery, filtered light and a strong connection between indoors and outdoors.",
+          "img": "/matrix/Connected to Nature (Greenery, indoor outdoor flow).jpg",
+          "scores": { "Tropical Modern": 3, "Contemporary Indian": 1 }
+        }
+      ],
+      "endNote": "Architectural insight: The feeling of a space comes from more than furniture or decoration. Proportion, light, material, colour, texture and spatial openness all contribute to its atmosphere."
+    },
+    {
+      "id": 2,
+      "title": "Which material combination feels most like you?",
+      "subtitle": "If you had to choose the material language of your home, which combination would you naturally gravitate towards? (Choose 1 option)",
+      "multiSelect": false,
+      "options": [
+        {
+          "id": "2A",
+          "label": "Stone + Wood + Linen",
+          "desc": "Natural stone, timber, soft fabrics and restrained colours.",
+          "img": "/matrix/Q2_A Stone  Wood  Linen.jpg",
+          "scores": { "Contemporary Indian": 3, "Modern Style": 1 }
+        },
+        {
+          "id": "2B",
+          "label": "Concrete + Glass + Metal",
+          "desc": "Exposed concrete, glass, metal and clean architectural surfaces.",
+          "img": "/matrix/Q2_B Concrete + Glass + Metal.jpg",
+          "scores": { "Industrial": 3, "Modern Style": 1 }
+        },
+        {
+          "id": "2C",
+          "label": "Marble + Wood + Brass",
+          "desc": "Rich stone, timber, brass details and carefully controlled lighting.",
+          "img": "/matrix/Q2_C Marble + Wood + Brass.jpg",
+          "scores": { "Contemporary Luxury": 3, "Neo Classical": 1 }
+        },
+        {
+          "id": "2D",
+          "label": "Plaster + Terracotta + Timber",
+          "desc": "Earthy plaster finishes, terracotta, timber and handcrafted textures.",
+          "img": "/matrix/Q2_D Plaster + Terracotta + Timber.jpg",
+          "scores": { "Classical Indian": 3, "Contemporary Indian": 1, "Tropical Modern": 1 }
+        },
+        {
+          "id": "2E",
+          "label": "Timber, clay, terrazzo, cane, plants & natural stone",
+          "desc": "A rich combination of natural materials, greenery and varied textures.",
+          "img": "/matrix/Q2_E Timber, clay, terrazzo, cane, plants & natural stone.jpg",
+          "scores": { "Contemporary Indian": 3, "Tropical Modern": 1, "Japandi": 1 }
+        },
+        {
+          "id": "2F",
+          "label": "Coloured tile, patterned fabric, painted surfaces & furniture",
+          "desc": "Colour, pattern and furniture become important parts of the design.",
+          "img": "/matrix/Q2_F Coloured tile, patterned fabric, painted surfaces.jpg",
+          "scores": { "Classical Indian": 3, "Modern Style": 1 }
+        },
+        {
+          "id": "2G",
+          "label": "Subtle & muted colours, soft fabric, rattan & minimal furniture",
+          "desc": "Calm neutral tones, lightweight natural textures and simple furniture.",
+          "img": "/matrix/Q2_G Subtle muted colours, soft fabric, rattan, minimal furniture.jpg",
+          "scores": { "Japandi": 3, "Modern Minimal": 1 }
+        }
+      ],
+      "endNote": "Architectural insight: Materiality is not simply about colour. Texture, reflectivity, scale, warmth, ageing and the way materials meet each other influence how a space is experienced."
+    },
+    {
+      "id": 3,
+      "title": "How do you prefer to live?",
+      "subtitle": "Think about your everyday life rather than how you want your home to look. You can choose up to 2 options.",
+      "multiSelect": true,
+      "options": [
+        {
+          "id": "3A",
+          "label": "I prefer order and want everything to have a place.",
+          "desc": "You may benefit from integrated storage, clean circulation and a reduced material palette.",
+          "img": "/matrix/Q3_A Order (Highly organized, integrated storage).jpg",
+          "scores": { "Modern Minimal": 3, "Japandi": 1 }
+        },
+        {
+          "id": "3B",
+          "label": "I spend time outdoors and want nature to be part of daily life.",
+          "desc": "You may benefit from courtyards, shaded terraces, large openings and garden connections.",
+          "img": "/matrix/Q3_B Outdoors (Courtyard, shaded terrace).jpg",
+          "scores": { "Tropical Modern": 3, "Contemporary Indian": 1 }
+        },
+        {
+          "id": "3C",
+          "label": "I enjoy hosting, displaying objects and changing my surroundings.",
+          "desc": "You may benefit from flexible rooms, strong focal points and adaptable lighting.",
+          "img": "/matrix/Q3_C Hosting (Flexible room with a strong focal point dining).jpg",
+          "scores": { "Modern Style": 3, "Contemporary Luxury": 1 }
+        },
+        {
+          "id": "3D",
+          "label": "I value openness, flexibility and a slightly unconventional atmosphere.",
+          "desc": "You may benefit from open planning, robust materials and expressive structural elements.",
+          "img": "/matrix/Q3_D Openness (Open plan, robust structural elements).jpg",
+          "scores": { "Industrial": 3, "Modern Style": 1 }
+        },
+        {
+          "id": "3E",
+          "label": "I want a home that feels settled, familiar and built to last.",
+          "desc": "You may benefit from balanced proportions, durable finishes and references to local architecture.",
+          "img": "/matrix/Q3_E Settled (Durable finishes, traditional proportions).jpg",
+          "scores": { "Contemporary Indian": 3, "Classical Indian": 1, "Japandi": 1 }
+        },
+        {
+          "id": "3F",
+          "label": "I like grandeur and want every space to feel like a feature.",
+          "desc": "You may benefit from distinct spaces, strong architectural details and layered lighting.",
+          "img": "/matrix/Q3_F Grandeur (Distinct formal space, layered lighting).jpg",
+          "scores": { "Neo Classical": 3, "Classical Indian": 1 }
+        }
+      ],
+      "endNote": "Architectural insight: Good architecture begins with understanding how a person actually lives. Storage, circulation, indoor–outdoor connections, flexibility, focal points and proportions can be designed around lifestyle."
+    },
+    {
+      "id": 4,
+      "title": "How much personality should your home show?",
+      "subtitle": "Imagine someone visiting your home for the first time. Which statement feels closest to you? Choose 1 option.",
+      "multiSelect": false,
+      "options": [
+        {
+          "id": "4A",
+          "label": "\"I want my home to feel calm and uncluttered.\"",
+          "desc": "I prefer simplicity, consistency and visual quiet.",
+          "img": "/matrix/Q4_A Calm & uncluttered (Visually quiet).jpg",
+          "scores": { "Modern Minimal": 3, "Japandi": 1 }
+        },
+        {
+          "id": "4B",
+          "label": "\"I want my home to feel carefully curated.\"",
+          "desc": "I like a clean base with selected artwork, objects and details.",
+          "img": "/matrix/Q4_B Carefully curated (Clean base with a few selected artworks).jpg",
+          "scores": { "Japandi": 3, "Modern Minimal": 1 }
+        },
+        {
+          "id": "4C",
+          "label": "\"I want my home to tell my story.\"",
+          "desc": "I enjoy collecting things, displaying memories and bringing individuality into my surroundings.",
+          "img": "/matrix/Q4_C Tells my story (Eclectic, displaying memories collections).jpg",
+          "scores": { "Contemporary Indian": 3, "Modern Style": 1 }
+        },
+        {
+          "id": "4D",
+          "label": "\"I want my home to make a statement.\"",
+          "desc": "I enjoy distinctive forms, colours, materials or architectural features that create a strong impression.",
+          "img": "/matrix/Q4_D Make a statement (Distinctive, striking architectural feature).jpg",
+          "scores": { "Contemporary Luxury": 3, "Neo Classical": 1 }
+        }
+      ],
+      "endNote": "Architectural insight: Personal expression does not necessarily mean more decoration. It can come through art, colour, material, architecture, lighting or the way spaces are composed."
+    },
+    {
+      "id": 5,
+      "title": "What do you want your home to feel like 10 years from now?",
+      "subtitle": "Choose the option that resonates most with your long-term vision.",
+      "multiSelect": false,
+      "options": [
+        {
+          "id": "5A",
+          "label": "Timeless",
+          "desc": "I want it to remain elegant even as trends change.",
+          "img": "/matrix/Q5_A Timeless (Elegant, trend-proof).jpg",
+          "scores": { "Neo Classical": 3, "Modern Minimal": 1 }
+        },
+        {
+          "id": "5B",
+          "label": "Personal",
+          "desc": "I want it to evolve with my life and continue telling my story.",
+          "img": "/matrix/Q5_B Personal (Evolving, character-rich).jpg",
+          "scores": { "Contemporary Indian": 3, "Modern Style": 1 }
+        },
+        {
+          "id": "5C",
+          "label": "Impressive",
+          "desc": "I want it to have a strong identity and leave an impression.",
+          "img": "/matrix/Q5_C Impressive (Strong identity, striking).jpg",
+          "scores": { "Contemporary Luxury": 3, "Neo Classical": 1 }
+        },
+        {
+          "id": "5D",
+          "label": "Comfortable",
+          "desc": "I want it to feel familiar, relaxed and welcoming for years to come.",
+          "img": "/matrix/Q5_D Comfortable (Familiar, relaxed, welcoming).jpg",
+          "scores": { "Japandi": 3, "Contemporary Indian": 1 }
+        },
+        {
+          "id": "5E",
+          "label": "Connected",
+          "desc": "I want it to age naturally and develop a stronger relationship with its surroundings over time.",
+          "img": "/matrix/Q5_E Connected (Aging naturally with its surroundings).jpg",
+          "scores": { "Tropical Modern": 3, "Contemporary Indian": 1 }
+        }
+      ],
+      "endNote": "Architectural insight: A successful home is not designed only for the day it is completed. Materials, proportions, flexibility and the relationship with surroundings influence how a space ages."
+    }
+  ],
+  "resultImages": {
+    "Contemporary Indian": "/matrix/Contemporary Indian.jpg",
+    "Classical Indian": "/matrix/Classical Indian.jpg",
+    "Modern Minimal": "/matrix/Modern Minimal.jpg",
+    "Modern Style": "/matrix/Modern Style.jpg",
+    "Japandi": "/matrix/Japandi.jpg",
+    "Tropical Modern": "/matrix/Tropical Modern.jpg",
+    "Contemporary Luxury": "/matrix/Contemporary Luxury.jpg",
+    "Neo Classical": "/matrix/Neo Classical.jpg",
+    "Industrial": "/matrix/Industrial.jpg"
+  },
+  "styleDetails": {
+    "Contemporary Luxury": {
+      "subtitle": "Bold Geometry · Statement Materials · Layered Grandeur",
+      "description": "Defined by strong geometric forms, statement materials like rich marble, warm timber, and polished brass accents. Features carefully controlled, dramatic lighting and a grand sense of volume crafted to leave an unforgettable impression.",
+      "materials": ["Bookmatched Marble", "Warm Timber", "Brushed Brass Details", "Layered Illumination"],
+      "spatialVibe": "Sculpted opulence, high-impact focal drama & tailored refinement."
+    },
+    "Japandi": {
+      "subtitle": "Warm Minimalist · Tactile Serenity · Organic Comfort",
+      "description": "A harmonious synthesis of Scandinavian warmth and Japanese functional minimalism. Emphasizes warm wood tones, tactile textured surfaces, soft natural lighting, and comfortable, welcoming spaces designed for mindful, clutter-free everyday living.",
+      "materials": ["Natural Oak & Ash", "Rattan & Linen", "Wabi-Sabi Ceramics", "Muted Earth Tones"],
+      "spatialVibe": "Calm visual quiet, organic warmth & understated balance."
+    },
+    "Tropical Modern": {
+      "subtitle": "Biophilic Harmony · Verdant Courtyards · Breathing Spaces",
+      "description": "Blurs the threshold between indoor sanctuary and outdoor nature. Utilizes tranquil courtyards, shaded verandas, deep overhangs, and expansive glass portals that capture breezes, filtered daylight, and lush greenery that ages gracefully with time.",
+      "materials": ["Indigenous Stone & Teak", "Courtyards & Water", "Shaded Deep Terraces", "Abundant Natural Greenery"],
+      "spatialVibe": "Deeply relaxing, indoor-outdoor flow & climate-responsive serenity."
+    },
+    "Modern Minimal": {
+      "subtitle": "Clean Lines · Uncluttered Restraint · Pure Light",
+      "description": "Rooted in simplicity, visual quiet, and spatial discipline. Features crisp geometric planes, concealed integrated storage, seamless circulation, and a restrained monochromatic palette that elevates soft natural daylight into the primary design element.",
+      "materials": ["Smooth Micro-cement", "Concealed Millwork", "Linen & Glass", "Soft Diffused Daylight"],
+      "spatialVibe": "Impeccable order, visual quiet & calming spatial clarity."
+    },
+    "Contemporary Indian": {
+      "subtitle": "Rooted Heritage · Artisanal Warmth · Evolving Story",
+      "description": "A sensitive dialogue between cultural roots and contemporary aesthetics. Combines balanced proportions, native stone, terracotta, timber, cane, and terrazzo to craft a home that feels familiar, durable, and built to celebrate life stories across generations.",
+      "materials": ["Natural Stone & Timber", "Terracotta & Clay Finishes", "Cane, Plants & Terrazzo", "Handcrafted Metal"],
+      "spatialVibe": "Grounded permanence, cultural depth & evolving warmth."
+    },
+    "Classical Indian": {
+      "subtitle": "Artisanal Craftsmanship · Heritage Proportions · Regal Depth",
+      "description": "Rooted in timeless cultural heritage and artisanal mastery. Celebrates traditional balanced proportions, earthy lime plaster walls, terracotta accents, intricately carved timber, and vibrant patterned fabrics that bestow a stately, sanctuary-like presence.",
+      "materials": ["Earthy Plaster & Lime", "Hand-carved Timber", "Terracotta & Tile Inlays", "Heritage Patterned Fabrics"],
+      "spatialVibe": "Artisanal authenticity, regal gravitas & crafted timelessness."
+    },
+    "Modern Style": {
+      "subtitle": "Dynamic Living · Flexible Volumes · Strong Focal Points",
+      "description": "Designed for expressive, dynamic contemporary lifestyles and hosting. Features versatile open-plan rooms, strong focal features, adaptable lighting systems, and crisp materials that comfortably adjust between intimate downtime and lively gatherings.",
+      "materials": ["Architectural Metal & Glass", "Engineered Hardwood", "Adaptable Lighting", "Statement Sculptural Accents"],
+      "spatialVibe": "Flexible openness, vibrant hosting & dynamic modern comfort."
+    },
+    "Neo Classical": {
+      "subtitle": "Symmetrical Harmony · Stately Grandeur · Timeless Elegance",
+      "description": "Inspired by classical symmetry, noble proportions, and architectural hierarchy. Showcases distinct formal spaces, layered cornices and mouldings, statement chandeliers, and curated luxury materials that remain elegant even as passing trends change.",
+      "materials": ["Fine Marble & Stone", "Architectural Mouldings", "Layered Chandeliers & Brass", "Formal Symmetrical Millwork"],
+      "spatialVibe": "Generational prestige, formal grandeur & dignified elegance."
+    },
+    "Industrial": {
+      "subtitle": "Structural Honesty · Open Loft Volumes · Raw Authenticity",
+      "description": "Celebrates unadorned structural honesty and unconventional volume. Highlights exposed concrete walls, blackened structural steel, expansive Crittall-style glass panels, and open circulation that together create an authentic, edgy, and spacious architectural statement.",
+      "materials": ["Board-formed Concrete", "Blackened Steel Framing", "Expansive Glazing", "Raw Reclaimed Timber"],
+      "spatialVibe": "High-volume openness, raw tactile edge & structural authenticity."
+    }
+  }
+}

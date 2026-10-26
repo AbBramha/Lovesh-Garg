@@ -19,6 +19,7 @@ import {
   FiFileText,
   FiPhone,
   FiImage,
+  FiGrid,
   FiExternalLink,
   FiAlertCircle,
   FiCheckCircle,
@@ -125,11 +126,13 @@ export default function AdminPage() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Active navigation tab
-  const [activeTab, setActiveTab] = useState<'projects' | 'homepage' | 'estimator' | 'contact'>('projects');
+  const [activeTab, setActiveTab] = useState<'projects' | 'homepage' | 'matrix' | 'estimator' | 'contact'>('projects');
 
   // Loaded data
   const [projects, setProjects] = useState<Project[]>([]);
   const [siteContent, setSiteContent] = useState<SiteContent | null>(null);
+  const [matrixData, setMatrixData] = useState<any>(null);
+  const [selectedMatrixStep, setSelectedMatrixStep] = useState<number | 'results'>(1);
   const [loadingData, setLoadingData] = useState(true);
 
   // Feedback notifications
@@ -200,9 +203,10 @@ export default function AdminPage() {
   const loadDashboardData = async () => {
     setLoadingData(true);
     try {
-      const [projRes, contentRes] = await Promise.all([
+      const [projRes, contentRes, matrixRes] = await Promise.all([
         fetch('/api/admin/projects'),
-        fetch('/api/admin/content')
+        fetch('/api/admin/content'),
+        fetch('/api/admin/matrix')
       ]);
 
       if (projRes.ok) {
@@ -213,10 +217,38 @@ export default function AdminPage() {
         const contentData = await contentRes.json();
         setSiteContent(contentData);
       }
+      if (matrixRes.ok) {
+        const mData = await matrixRes.json();
+        setMatrixData(mData);
+      }
     } catch (err) {
       showToast('Error loading studio data', 'error');
     } finally {
       setLoadingData(false);
+    }
+  };
+
+  // Save Design Matrix Data
+  const saveMatrixData = async (dataToSave = matrixData) => {
+    if (!dataToSave) return;
+    setIsSaving(true);
+    try {
+      const res = await fetch('/api/admin/matrix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSave)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setMatrixData(dataToSave);
+        showToast(data.message || 'Design Matrix published to repository', 'success');
+      } else {
+        showToast(data.message || 'Failed to save matrix', 'error');
+      }
+    } catch {
+      showToast('Error saving Design Matrix', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -589,6 +621,7 @@ export default function AdminPage() {
             {[
               { id: 'projects', label: 'Selected Works', icon: FiLayers, count: projects.length },
               { id: 'homepage', label: 'Homepage Sections', icon: FiFileText },
+              { id: 'matrix', label: 'Design Matrix Quiz', icon: FiGrid },
               { id: 'estimator', label: 'Budget Estimator Rates', icon: FiSliders },
               { id: 'contact', label: 'Studio & Socials', icon: FiPhone }
             ].map((tab) => {
@@ -632,7 +665,13 @@ export default function AdminPage() {
 
           {activeTab !== 'projects' && (
             <button
-              onClick={saveSiteContent}
+              onClick={() => {
+                if (activeTab === 'matrix') {
+                  saveMatrixData();
+                } else {
+                  saveSiteContent();
+                }
+              }}
               disabled={isSaving}
               className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black rounded-lg text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer shadow-sm disabled:opacity-50"
             >
@@ -1361,6 +1400,424 @@ export default function AdminPage() {
                 ))}
               </div>
             </div>
+
+            {/* DESIGN MATRIX BANNER */}
+            {matrixData?.banner && (
+              <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+                <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                  <div>
+                    <h3 className="text-lg font-serif font-medium text-white">Design Matrix Teaser Banner</h3>
+                    <p className="text-xs text-white/50 mt-0.5">
+                      Homepage full-screen invitation section leading users into the visual quiz.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="md:col-span-2">
+                    <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                      Section Headline
+                    </label>
+                    <input
+                      type="text"
+                      value={matrixData.banner.headline}
+                      onChange={(e) => {
+                        const updated = {
+                          ...matrixData,
+                          banner: { ...matrixData.banner, headline: e.target.value }
+                        };
+                        setMatrixData(updated);
+                      }}
+                      className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                      Philosophical Quote / Subtitle
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={matrixData.banner.quote}
+                      onChange={(e) => {
+                        const updated = {
+                          ...matrixData,
+                          banner: { ...matrixData.banner, quote: e.target.value }
+                        };
+                        setMatrixData(updated);
+                      }}
+                      className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                      Feature Badge (e.g. 5 questions · 60 seconds)
+                    </label>
+                    <input
+                      type="text"
+                      value={matrixData.banner.badge}
+                      onChange={(e) => {
+                        const updated = {
+                          ...matrixData,
+                          banner: { ...matrixData.banner, badge: e.target.value }
+                        };
+                        setMatrixData(updated);
+                      }}
+                      className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                      Action Button Text
+                    </label>
+                    <input
+                      type="text"
+                      value={matrixData.banner.buttonText}
+                      onChange={(e) => {
+                        const updated = {
+                          ...matrixData,
+                          banner: { ...matrixData.banner, buttonText: e.target.value }
+                        };
+                        setMatrixData(updated);
+                      }}
+                      className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* TAB 3: DESIGN MATRIX QUIZ */}
+        {/* ======================================================== */}
+        {activeTab === 'matrix' && matrixData && (
+          <div className="space-y-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
+              <div>
+                <h2 className="text-xl font-serif font-medium text-white">Interactive Style Matrix Quiz</h2>
+                <p className="text-xs text-white/50 mt-1">
+                  Customize the quiz questions, architectural insights, and upload replacement visuals for all option photos and final result styles.
+                </p>
+              </div>
+              <Link
+                href="/matrix"
+                target="_blank"
+                className="shrink-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-amber-400/10 text-amber-300 border border-amber-400/30 text-xs font-semibold"
+              >
+                <FiExternalLink />
+                <span>Test Live Quiz (/matrix)</span>
+              </Link>
+            </div>
+
+            {/* Matrix Step Navigation Tabs */}
+            <div className="flex flex-wrap items-center gap-2 pb-2">
+              {[1, 2, 3, 4, 5].map((qNum) => (
+                <button
+                  key={qNum}
+                  onClick={() => setSelectedMatrixStep(qNum)}
+                  className={`px-4 py-2 rounded-xl text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
+                    selectedMatrixStep === qNum
+                      ? 'bg-amber-400 text-black shadow-lg shadow-amber-400/10 font-bold'
+                      : 'bg-[#161616] hover:bg-[#202020] text-white/70 border border-white/5'
+                  }`}
+                >
+                  Question {qNum}
+                </button>
+              ))}
+              <button
+                onClick={() => setSelectedMatrixStep('results')}
+                className={`px-4 py-2 rounded-xl text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer ${
+                  selectedMatrixStep === 'results'
+                    ? 'bg-amber-400 text-black shadow-lg shadow-amber-400/10 font-bold'
+                    : 'bg-[#161616] hover:bg-[#202020] text-white/70 border border-white/5'
+                }`}
+              >
+                Result Styles (9)
+              </button>
+            </div>
+
+            {/* QUESTIONS EDITOR (Q1 to Q5) */}
+            {typeof selectedMatrixStep === 'number' && (() => {
+              const qIndex = selectedMatrixStep - 1;
+              const question = matrixData.questions?.[qIndex];
+              if (!question) return null;
+
+              return (
+                <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+                  <div className="border-b border-white/5 pb-4">
+                    <span className="text-[10px] uppercase tracking-widest text-amber-400 font-semibold block mb-1">
+                      Step {question.id} of 5
+                    </span>
+                    <h3 className="text-lg font-serif font-medium text-white">{question.title}</h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="md:col-span-2">
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Question Title
+                      </label>
+                      <input
+                        type="text"
+                        value={question.title}
+                        onChange={(e) => {
+                          const updated = [...matrixData.questions];
+                          updated[qIndex] = { ...updated[qIndex], title: e.target.value };
+                          setMatrixData({ ...matrixData, questions: updated });
+                        }}
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Question Subtitle / Guidance
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={question.subtitle}
+                        onChange={(e) => {
+                          const updated = [...matrixData.questions];
+                          updated[qIndex] = { ...updated[qIndex], subtitle: e.target.value };
+                          setMatrixData({ ...matrixData, questions: updated });
+                        }}
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Architectural Insight / End Note
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={question.endNote}
+                        onChange={(e) => {
+                          const updated = [...matrixData.questions];
+                          updated[qIndex] = { ...updated[qIndex], endNote: e.target.value };
+                          setMatrixData({ ...matrixData, questions: updated });
+                        }}
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Options List */}
+                  <div className="pt-4 border-t border-white/5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-serif font-medium text-white">
+                        Visual Options ({question.options?.length || 0})
+                      </h4>
+                      <span className="text-[10px] tracking-wider uppercase text-white/40">
+                        {question.multiSelect ? 'Multi-select (Up to 2)' : 'Single Select'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      {(question.options || []).map((opt: any, optIdx: number) => (
+                        <div key={opt.id || optIdx} className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/5 text-amber-300 border border-white/10">
+                              Option {opt.id}
+                            </span>
+                            <span className="text-[10px] text-white/40 truncate max-w-[200px]">
+                              Contributes: {Object.keys(opt.scores || {}).join(', ')}
+                            </span>
+                          </div>
+
+                          {/* Image preview & upload */}
+                          <div className="relative aspect-video bg-neutral-900 rounded-lg overflow-hidden border border-white/10 group">
+                            {opt.img ? (
+                              <Image src={opt.img} alt={opt.label} fill className="object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-white/20">
+                                <FiImage className="text-2xl" />
+                              </div>
+                            )}
+                            <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-medium text-xs cursor-pointer">
+                              <FiUpload />
+                              <span>Replace Photo</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    const url = await handleFileUpload(file);
+                                    if (url) {
+                                      const updatedQuestions = [...matrixData.questions];
+                                      const updatedOpts = [...updatedQuestions[qIndex].options];
+                                      updatedOpts[optIdx] = { ...updatedOpts[optIdx], img: url };
+                                      updatedQuestions[qIndex].options = updatedOpts;
+                                      setMatrixData({ ...matrixData, questions: updatedQuestions });
+                                    }
+                                  }
+                                }}
+                              />
+                            </label>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] uppercase tracking-widest text-white/40 mb-1">
+                              Option Label
+                            </label>
+                            <input
+                              type="text"
+                              value={opt.label}
+                              onChange={(e) => {
+                                const updatedQuestions = [...matrixData.questions];
+                                const updatedOpts = [...updatedQuestions[qIndex].options];
+                                updatedOpts[optIdx] = { ...updatedOpts[optIdx], label: e.target.value };
+                                updatedQuestions[qIndex].options = updatedOpts;
+                                setMatrixData({ ...matrixData, questions: updatedQuestions });
+                              }}
+                              className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] uppercase tracking-widest text-white/40 mb-1">
+                              Description
+                            </label>
+                            <textarea
+                              rows={2}
+                              value={opt.desc}
+                              onChange={(e) => {
+                                const updatedQuestions = [...matrixData.questions];
+                                const updatedOpts = [...updatedQuestions[qIndex].options];
+                                updatedOpts[optIdx] = { ...updatedOpts[optIdx], desc: e.target.value };
+                                updatedQuestions[qIndex].options = updatedOpts;
+                                setMatrixData({ ...matrixData, questions: updatedQuestions });
+                              }}
+                              className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* RESULT STYLES SHOWCASE EDITOR */}
+            {selectedMatrixStep === 'results' && matrixData.resultImages && (
+              <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+                <div className="border-b border-white/5 pb-4">
+                  <h3 className="text-lg font-serif font-medium text-white">9 Architectural Result Styles</h3>
+                  <p className="text-xs text-white/50 mt-0.5">
+                    When visitors finish the Style Matrix quiz, their highest scoring architectural style is revealed with its hero imagery and details.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Object.keys(matrixData.resultImages).map((styleName) => {
+                    const imgUrl = matrixData.resultImages[styleName];
+                    const details = matrixData.styleDetails?.[styleName] || {
+                      subtitle: '',
+                      description: '',
+                      materials: [],
+                      spatialVibe: ''
+                    };
+
+                    return (
+                      <div key={styleName} className="bg-[#181818] border border-white/5 rounded-xl p-4 space-y-3 flex flex-col justify-between">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="font-serif text-sm font-semibold text-white">{styleName}</span>
+                            <span className="text-[10px] uppercase tracking-wider text-amber-400">Result Style</span>
+                          </div>
+
+                          <div className="relative aspect-video bg-neutral-900 rounded-lg overflow-hidden border border-white/10 group">
+                            {imgUrl ? (
+                              <Image src={imgUrl} alt={styleName} fill className="object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-white/20">
+                                <FiImage className="text-2xl" />
+                              </div>
+                            )}
+                            <label className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-medium text-xs cursor-pointer">
+                              <FiUpload />
+                              <span>Replace Showcase Photo</span>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    const url = await handleFileUpload(file);
+                                    if (url) {
+                                      setMatrixData({
+                                        ...matrixData,
+                                        resultImages: {
+                                          ...matrixData.resultImages,
+                                          [styleName]: url
+                                        }
+                                      });
+                                    }
+                                  }
+                                }}
+                              />
+                            </label>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] uppercase tracking-widest text-white/40 mb-1">
+                              Style Essence / Subtitle
+                            </label>
+                            <input
+                              type="text"
+                              value={details.subtitle}
+                              onChange={(e) => {
+                                setMatrixData({
+                                  ...matrixData,
+                                  styleDetails: {
+                                    ...matrixData.styleDetails,
+                                    [styleName]: {
+                                      ...details,
+                                      subtitle: e.target.value
+                                    }
+                                  }
+                                });
+                              }}
+                              className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] uppercase tracking-widest text-white/40 mb-1">
+                              Narrative Description
+                            </label>
+                            <textarea
+                              rows={3}
+                              value={details.description}
+                              onChange={(e) => {
+                                setMatrixData({
+                                  ...matrixData,
+                                  styleDetails: {
+                                    ...matrixData.styleDetails,
+                                    [styleName]: {
+                                      ...details,
+                                      description: e.target.value
+                                    }
+                                  }
+                                });
+                              }}
+                              className="w-full bg-[#121212] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
