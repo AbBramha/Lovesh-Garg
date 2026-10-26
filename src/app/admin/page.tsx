@@ -346,12 +346,12 @@ export default function AdminPage() {
           <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-white/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative text-center mb-8 flex flex-col items-center">
-            <div className="relative w-16 h-12 mb-3">
+            <div className="relative w-20 h-14 rounded-xl bg-white p-1 overflow-hidden border border-white/20 shadow-xl mb-3 flex items-center justify-center">
               <Image
-                src="/logo-white-transparent.png"
+                src="/nidhivan-tree-logo.png"
                 alt="Nidhivan Design Studio Logo"
                 fill
-                sizes="64px"
+                sizes="80px"
                 className="object-contain"
                 priority
               />
@@ -476,13 +476,14 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link href="/" className="group flex items-center gap-3.5">
-              <div className="relative w-11 h-9 shrink-0 overflow-hidden">
+              <div className="relative w-12 h-9 rounded-lg bg-white p-0.5 overflow-hidden shrink-0 border border-white/20 shadow-sm flex items-center justify-center group-hover:border-amber-400/60 transition-all">
                 <Image
-                  src="/logo-white-transparent.png"
+                  src="/nidhivan-tree-logo.png"
                   alt="Nidhivan Design Studio Logo"
                   fill
                   sizes="48px"
-                  className="object-contain group-hover:scale-105 transition-transform duration-300"
+                  className="object-contain"
+                  priority
                 />
               </div>
               <div>
