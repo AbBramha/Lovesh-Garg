@@ -10,6 +10,8 @@ export default function Contact() {
   const formConfig = footer.form || {};
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -34,9 +36,28 @@ export default function Contact() {
   const formSubtitle = formConfig.subtitle || "";
   const successMessage = formConfig.successMessage || "Thank you for reaching out. Our studio team will get back to you shortly.";
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone, message })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage(data.message || 'Something went wrong. Please try again.');
+      }
+    } catch {
+      setErrorMessage('Network error submitting inquiry. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -133,11 +154,15 @@ export default function Contact() {
                 placeholder={messagePlaceholder} 
                 className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-amber-400 placeholder-white/50 text-white text-sm transition-colors resize-none"
               ></textarea>
+              {errorMessage && (
+                <p className="text-xs text-red-400 font-medium -mt-2">{errorMessage}</p>
+              )}
               <button 
                 type="submit" 
-                className="self-start mt-4 border border-white px-8 py-4 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-white hover:text-black transition-colors cursor-pointer"
+                disabled={isSubmitting}
+                className="self-start mt-4 border border-white px-8 py-4 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-white hover:text-black transition-colors cursor-pointer disabled:opacity-50"
               >
-                {submitText}
+                {isSubmitting ? 'Sending...' : submitText}
               </button>
             </form>
           )}

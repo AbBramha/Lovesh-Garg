@@ -1,0 +1,29 @@
+[
+  {
+    "id": "inq_1793036474910_labwo",
+    "createdAt": "2026-10-26T17:41:14.910Z",
+    "name": "Aarav Sharma",
+    "email": "aarav.sharma@archstudio.in",
+    "phone": "+91 98100 12345",
+    "message": "Need complete architectural consultation",
+    "status": "new"
+  },
+  {
+    "id": "inq_demo_1",
+    "createdAt": "2026-10-25T14:30:00.000Z",
+    "name": "Sarah Jenkins",
+    "email": "sarah.j@residentialbuild.com",
+    "phone": "+91 98112 34567",
+    "message": "We recently purchased a 7,500 sq ft plot in Gurgaon and want an environmentally integrated, minimal luxury residence. We would love to schedule a preliminary studio consultation.",
+    "status": "new"
+  },
+  {
+    "id": "inq_demo_2",
+    "createdAt": "2026-10-24T18:15:00.000Z",
+    "name": "Vikramaditya Singhania",
+    "email": "vikram.singhania@heritageestates.in",
+    "phone": "+91 99990 12345",
+    "message": "Looking to re-architect our heritage family retreat in Himachal with contemporary stone and glass materiality. Need complete architecture and interior masterplanning.",
+    "status": "contacted"
+  }
+]

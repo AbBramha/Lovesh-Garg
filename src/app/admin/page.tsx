@@ -26,7 +26,11 @@ import {
   FiEye,
   FiEyeOff,
   FiMail,
-  FiArrowLeft
+  FiArrowLeft,
+  FiInbox,
+  FiDownload,
+  FiSearch,
+  FiMessageSquare
 } from 'react-icons/fi';
 
 interface Project {
@@ -45,6 +49,16 @@ interface Project {
   concept: string;
   highlights: string[];
   materials: string[];
+}
+
+interface Inquiry {
+  id: string;
+  createdAt: string;
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+  status: 'new' | 'contacted' | 'archived';
 }
 
 interface SiteContent {
@@ -160,12 +174,15 @@ export default function AdminPage() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Active navigation tab
-  const [activeTab, setActiveTab] = useState<'projects' | 'homepage' | 'matrix' | 'estimator' | 'contact'>('projects');
+  const [activeTab, setActiveTab] = useState<'projects' | 'homepage' | 'matrix' | 'estimator' | 'contact' | 'inquiries'>('projects');
 
   // Loaded data
   const [projects, setProjects] = useState<Project[]>([]);
   const [siteContent, setSiteContent] = useState<SiteContent | null>(null);
   const [matrixData, setMatrixData] = useState<any>(null);
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [inquirySearch, setInquirySearch] = useState('');
+  const [inquiryFilter, setInquiryFilter] = useState<'all' | 'new' | 'contacted'>('all');
   const [selectedMatrixStep, setSelectedMatrixStep] = useState<number | 'results'>(1);
   const [loadingData, setLoadingData] = useState(true);
 
@@ -237,10 +254,11 @@ export default function AdminPage() {
   const loadDashboardData = async () => {
     setLoadingData(true);
     try {
-      const [projRes, contentRes, matrixRes] = await Promise.all([
+      const [projRes, contentRes, matrixRes, inqRes] = await Promise.all([
         fetch('/api/admin/projects'),
         fetch('/api/admin/content'),
-        fetch('/api/admin/matrix')
+        fetch('/api/admin/matrix'),
+        fetch('/api/admin/inquiries')
       ]);
 
       if (projRes.ok) {
@@ -255,11 +273,89 @@ export default function AdminPage() {
         const mData = await matrixRes.json();
         setMatrixData(mData);
       }
+      if (inqRes && inqRes.ok) {
+        const inqData = await inqRes.json();
+        if (inqData.success && Array.isArray(inqData.inquiries)) {
+          setInquiries(inqData.inquiries);
+        }
+      }
     } catch (err) {
       showToast('Error loading studio data', 'error');
     } finally {
       setLoadingData(false);
     }
+  };
+
+  // Inquiry Management Handlers
+  const handleUpdateInquiryStatus = async (inquiryId: string, status: 'new' | 'contacted' | 'archived') => {
+    try {
+      const res = await fetch('/api/admin/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update_status', inquiryId, status })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setInquiries(data.inquiries);
+        showToast(`Lead marked as ${status}`, 'success');
+      } else {
+        showToast(data.message || 'Failed to update lead status', 'error');
+      }
+    } catch {
+      showToast('Network error updating lead status', 'error');
+    }
+  };
+
+  const handleDeleteInquiry = async (inquiryId: string) => {
+    if (!confirm('Are you sure you want to delete this client inquiry?')) return;
+    try {
+      const res = await fetch('/api/admin/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', inquiryId })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setInquiries(data.inquiries);
+        showToast('Lead inquiry deleted', 'success');
+      } else {
+        showToast(data.message || 'Failed to delete lead', 'error');
+      }
+    } catch {
+      showToast('Network error deleting lead', 'error');
+    }
+  };
+
+  const exportInquiriesToCSV = () => {
+    if (inquiries.length === 0) {
+      showToast('No inquiries to export', 'error');
+      return;
+    }
+    const headers = ['ID', 'Date', 'Time', 'Client Name', 'Email', 'Phone', 'Status', 'Message'];
+    const rows = inquiries.map(inq => {
+      const d = new Date(inq.createdAt);
+      const dateStr = d.toLocaleDateString();
+      const timeStr = d.toLocaleTimeString();
+      return [
+        inq.id,
+        `"${dateStr}"`,
+        `"${timeStr}"`,
+        `"${(inq.name || '').replace(/"/g, '""')}"`,
+        `"${(inq.email || '').replace(/"/g, '""')}"`,
+        `"${(inq.phone || '').replace(/"/g, '""')}"`,
+        `"${inq.status}"`,
+        `"${(inq.message || '').replace(/"/g, '""')}"`
+      ].join(',');
+    });
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `nidhivan_client_leads_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Client leads exported to CSV', 'success');
   };
 
   // Save Design Matrix Data
@@ -657,7 +753,14 @@ export default function AdminPage() {
               { id: 'homepage', label: 'Homepage Sections', icon: FiFileText },
               { id: 'matrix', label: 'Design Matrix Quiz', icon: FiGrid },
               { id: 'estimator', label: 'Budget Estimator Rates', icon: FiSliders },
-              { id: 'contact', label: 'Studio & Socials', icon: FiPhone }
+              { id: 'contact', label: 'Studio & Socials', icon: FiPhone },
+              { 
+                id: 'inquiries', 
+                label: 'Client Leads', 
+                icon: FiInbox, 
+                count: inquiries.length,
+                newBadge: inquiries.filter(i => i.status === 'new').length
+              }
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -673,7 +776,15 @@ export default function AdminPage() {
                 >
                   <Icon className="text-sm" />
                   <span>{tab.label}</span>
-                  {tab.count !== undefined && (
+                  {tab.newBadge ? (
+                    <span
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                        isActive ? 'bg-black text-amber-400' : 'bg-amber-400 text-black animate-pulse'
+                      }`}
+                    >
+                      {tab.newBadge} New
+                    </span>
+                  ) : tab.count !== undefined ? (
                     <span
                       className={`text-[10px] px-1.5 py-0.5 rounded-full ${
                         isActive ? 'bg-black/20 text-black' : 'bg-white/10 text-white/60'
@@ -681,7 +792,7 @@ export default function AdminPage() {
                     >
                       {tab.count}
                     </span>
-                  )}
+                  ) : null}
                 </button>
               );
             })}
@@ -697,7 +808,17 @@ export default function AdminPage() {
             </button>
           )}
 
-          {activeTab !== 'projects' && (
+          {activeTab === 'inquiries' && (
+            <button
+              onClick={exportInquiriesToCSV}
+              className="shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer border border-white/10"
+            >
+              <FiDownload />
+              <span>Export CSV</span>
+            </button>
+          )}
+
+          {activeTab !== 'projects' && activeTab !== 'inquiries' && (
             <button
               onClick={async () => {
                 if (activeTab === 'matrix') {
@@ -2911,6 +3032,250 @@ export default function AdminPage() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* TAB 6: CLIENT INQUIRIES & LEADS */}
+        {/* ======================================================== */}
+        {activeTab === 'inquiries' && (
+          <div className="space-y-8">
+            {/* Header & Metrics Strip */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
+              <div>
+                <h2 className="text-xl font-serif font-medium text-white">Client Inquiries & Project Leads</h2>
+                <p className="text-xs text-white/50 mt-1">
+                  Prospective clients and architectural commissions submitted through the website footer contact form.
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={exportInquiriesToCSV}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-xs font-semibold text-white transition-all cursor-pointer"
+                >
+                  <FiDownload />
+                  <span>Export to CSV</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Metrics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-[#121212] border border-white/10 rounded-2xl p-5">
+                <span className="text-[10px] uppercase tracking-widest text-white/40 block mb-1">Total Leads Received</span>
+                <p className="text-3xl font-serif font-light text-white">{inquiries.length}</p>
+              </div>
+              <div className="bg-[#121212] border border-amber-400/20 rounded-2xl p-5">
+                <span className="text-[10px] uppercase tracking-widest text-amber-400/80 block mb-1">New / Unread Leads</span>
+                <p className="text-3xl font-serif font-light text-amber-400">
+                  {inquiries.filter(i => i.status === 'new').length}
+                </p>
+              </div>
+              <div className="bg-[#121212] border border-emerald-400/20 rounded-2xl p-5">
+                <span className="text-[10px] uppercase tracking-widest text-emerald-400/80 block mb-1">Contacted / In Progress</span>
+                <p className="text-3xl font-serif font-light text-emerald-400">
+                  {inquiries.filter(i => i.status === 'contacted').length}
+                </p>
+              </div>
+            </div>
+
+            {/* Search and Filters Bar */}
+            <div className="bg-[#121212] border border-white/10 rounded-2xl p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                {[
+                  { id: 'all', label: 'All Leads', count: inquiries.length },
+                  { id: 'new', label: 'New', count: inquiries.filter(i => i.status === 'new').length },
+                  { id: 'contacted', label: 'Contacted', count: inquiries.filter(i => i.status === 'contacted').length }
+                ].map(f => (
+                  <button
+                    key={f.id}
+                    onClick={() => setInquiryFilter(f.id as any)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                      inquiryFilter === f.id
+                        ? 'bg-amber-400 text-black'
+                        : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    {f.label} ({f.count})
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative flex-1 max-w-md">
+                <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 text-xs" />
+                <input
+                  type="text"
+                  value={inquirySearch}
+                  onChange={(e) => setInquirySearch(e.target.value)}
+                  placeholder="Search by client name, email, phone, or keyword..."
+                  className="w-full bg-[#181818] border border-white/10 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-amber-400"
+                />
+              </div>
+            </div>
+
+            {/* Leads List */}
+            {(() => {
+              const filtered = inquiries.filter(inq => {
+                if (inquiryFilter !== 'all' && inq.status !== inquiryFilter) return false;
+                if (!inquirySearch.trim()) return true;
+                const query = inquirySearch.toLowerCase();
+                return (
+                  inq.name.toLowerCase().includes(query) ||
+                  inq.email.toLowerCase().includes(query) ||
+                  (inq.phone && inq.phone.toLowerCase().includes(query)) ||
+                  inq.message.toLowerCase().includes(query)
+                );
+              });
+
+              if (filtered.length === 0) {
+                return (
+                  <div className="bg-[#121212] border border-white/10 rounded-2xl p-12 text-center space-y-3">
+                    <FiInbox className="text-4xl text-white/20 mx-auto" />
+                    <h3 className="text-base font-serif text-white font-medium">No Inquiries Found</h3>
+                    <p className="text-xs text-white/40 max-w-md mx-auto">
+                      {inquirySearch.trim()
+                        ? 'No leads match your search query. Try clearing the search term.'
+                        : 'No inquiries have been received under this filter yet. When visitors fill the website footer contact form, their submissions will appear here instantly.'}
+                    </p>
+                  </div>
+                );
+              }
+
+              return (
+                <div className="space-y-4">
+                  {filtered.map(inq => {
+                    const dateObj = new Date(inq.createdAt);
+                    const formattedDate = dateObj.toLocaleDateString('en-US', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    });
+                    const formattedTime = dateObj.toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    });
+
+                    const cleanPhone = inq.phone ? inq.phone.replace(/[^0-9]/g, '') : '';
+
+                    return (
+                      <div
+                        key={inq.id}
+                        className={`bg-[#121212] border rounded-2xl p-6 transition-all ${
+                          inq.status === 'new'
+                            ? 'border-amber-400/40 shadow-lg shadow-amber-400/5'
+                            : 'border-white/10'
+                        }`}
+                      >
+                        {/* Top Header of Lead */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500/20 to-amber-300/30 border border-amber-400/30 text-amber-300 font-serif font-bold text-sm flex items-center justify-center shrink-0">
+                              {inq.name.slice(0, 2).toUpperCase()}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <h3 className="text-base font-serif font-medium text-white">
+                                  {inq.name}
+                                </h3>
+                                {inq.status === 'new' ? (
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-amber-400/15 text-amber-300 border border-amber-400/30 inline-flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                    New Lead
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider bg-emerald-400/15 text-emerald-300 border border-emerald-400/30 inline-flex items-center gap-1">
+                                    <FiCheck />
+                                    Contacted
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[11px] text-white/40 mt-0.5">
+                                Received on {formattedDate} at {formattedTime}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            {inq.status === 'new' ? (
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateInquiryStatus(inq.id, 'contacted')}
+                                className="px-3 py-1.5 bg-emerald-400/10 hover:bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                              >
+                                <FiCheck />
+                                <span>Mark as Contacted</span>
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateInquiryStatus(inq.id, 'new')}
+                                className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/10 rounded-xl text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+                              >
+                                <span>Mark as Unread</span>
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteInquiry(inq.id)}
+                              className="p-2 bg-red-950/20 hover:bg-red-950/50 text-red-400 border border-red-500/20 rounded-xl text-xs transition-colors cursor-pointer"
+                              title="Delete inquiry"
+                            >
+                              <FiTrash2 />
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Contact Badges */}
+                        <div className="flex flex-wrap gap-2.5 pt-4 pb-4">
+                          <a
+                            href={`mailto:${inq.email}?subject=Regarding Your Inquiry - Nidhivan Design Studio`}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#181818] hover:bg-[#202020] border border-white/5 text-xs text-white/80 hover:text-amber-300 transition-colors"
+                          >
+                            <FiMail className="text-amber-400 text-xs" />
+                            <span>{inq.email}</span>
+                          </a>
+
+                          {inq.phone && (
+                            <>
+                              <a
+                                href={`tel:${inq.phone}`}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#181818] hover:bg-[#202020] border border-white/5 text-xs text-white/80 hover:text-amber-300 transition-colors"
+                              >
+                                <FiPhone className="text-amber-400 text-xs" />
+                                <span>{inq.phone}</span>
+                              </a>
+
+                              {cleanPhone && (
+                                <a
+                                  href={`https://wa.me/${cleanPhone}?text=Hello%20${encodeURIComponent(inq.name)},%20thank%20you%20for%20contacting%20Nidhivan%20Design%20Studio.`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/30 hover:bg-emerald-950/60 border border-emerald-500/20 text-xs text-emerald-400 transition-colors"
+                                >
+                                  <FiMessageSquare className="text-xs" />
+                                  <span>WhatsApp Client</span>
+                                </a>
+                              )}
+                            </>
+                          )}
+                        </div>
+
+                        {/* Project Narrative Quote Box */}
+                        <div className="bg-[#161616] border border-white/5 rounded-xl p-4 space-y-1">
+                          <span className="text-[10px] uppercase tracking-widest text-amber-400 font-semibold block">
+                            Project Inquiry Details:
+                          </span>
+                          <p className="text-xs sm:text-sm text-white/90 font-light leading-relaxed whitespace-pre-line font-serif italic">
+                            "{inq.message}"
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>
