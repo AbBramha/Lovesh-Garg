@@ -47,6 +47,18 @@ interface Project {
 }
 
 interface SiteContent {
+  header?: {
+    logo: string;
+    brandName: string;
+    brandSubtitle: string;
+    navLinks: Array<{
+      id: string;
+      label: string;
+      href: string;
+    }>;
+    ctaText?: string;
+    ctaLink?: string;
+  };
   hero: {
     headline: string;
     button1Text: string;
@@ -730,6 +742,199 @@ export default function AdminPage() {
         {/* ======================================================== */}
         {activeTab === 'homepage' && siteContent && (
           <div className="space-y-10">
+            {/* HEADER & BRANDING SECTION */}
+            {(() => {
+              const headerData = siteContent.header || {
+                logo: '/nidhivan-tree-logo.png',
+                brandName: 'Nidhivan',
+                brandSubtitle: 'Design Studio',
+                navLinks: [
+                  { id: 'philosophy', label: 'Philosophy', href: '/#philosophy' },
+                  { id: 'works', label: 'Works', href: '/#works' },
+                  { id: 'matrix', label: 'Matrix', href: '/#design-matrix' },
+                  { id: 'estimator', label: 'Estimator', href: '/#project-estimator' },
+                  { id: 'contact', label: 'Contact', href: '/#contact' }
+                ],
+                ctaText: 'Estimate Project',
+                ctaLink: '/estimate'
+              };
+
+              return (
+                <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
+                  <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                    <div>
+                      <h3 className="text-lg font-serif font-medium text-white">Header & Studio Branding</h3>
+                      <p className="text-xs text-white/50 mt-0.5">
+                        Top fixed navigation bar, official logo mark, studio branding typography, and menu tabs.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Header Logo Uploader */}
+                    <div className="md:col-span-2 bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                      <label className="block text-xs uppercase tracking-widest text-white/70 font-semibold">
+                        Website Header Logo Mark
+                      </label>
+                      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                        <div className="relative w-16 h-12 bg-white rounded-lg overflow-hidden border border-white/20 shrink-0 p-1 flex items-center justify-center">
+                          <Image
+                            src={headerData.logo || '/nidhivan-tree-logo.png'}
+                            alt="Header Logo Preview"
+                            fill
+                            sizes="64px"
+                            className="object-contain"
+                          />
+                        </div>
+                        <div className="flex-1 w-full flex gap-2">
+                          <input
+                            type="text"
+                            value={headerData.logo}
+                            onChange={(e) =>
+                              setSiteContent({
+                                ...siteContent,
+                                header: { ...headerData, logo: e.target.value }
+                              })
+                            }
+                            placeholder="Logo path e.g. /nidhivan-tree-logo.png"
+                            className="flex-1 bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                          <label className="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors">
+                            <FiUpload />
+                            <span>Upload New Logo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = await handleFileUpload(file);
+                                  if (url) {
+                                    setSiteContent({
+                                      ...siteContent,
+                                      header: { ...headerData, logo: url }
+                                    });
+                                  }
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Studio Brand Name
+                      </label>
+                      <input
+                        type="text"
+                        value={headerData.brandName}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            header: { ...headerData, brandName: e.target.value }
+                          })
+                        }
+                        placeholder="e.g. Nidhivan"
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Studio Brand Subtitle / Tagline
+                      </label>
+                      <input
+                        type="text"
+                        value={headerData.brandSubtitle}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            header: { ...headerData, brandSubtitle: e.target.value }
+                          })
+                        }
+                        placeholder="e.g. Design Studio"
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Header CTA Button Label (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        value={headerData.ctaText || ''}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            header: { ...headerData, ctaText: e.target.value }
+                          })
+                        }
+                        placeholder="e.g. Estimate Project (Leave empty to hide)"
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs uppercase tracking-widest text-white/60 mb-2">
+                        Header CTA Destination Link
+                      </label>
+                      <input
+                        type="text"
+                        value={headerData.ctaLink || ''}
+                        onChange={(e) =>
+                          setSiteContent({
+                            ...siteContent,
+                            header: { ...headerData, ctaLink: e.target.value }
+                          })
+                        }
+                        placeholder="e.g. /estimate or /#contact"
+                        className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    {/* Navigation Menu Labels */}
+                    <div className="md:col-span-2 bg-[#181818] p-4 rounded-xl border border-white/5 space-y-3">
+                      <div className="border-b border-white/5 pb-2">
+                        <span className="text-xs uppercase tracking-widest text-white/70 font-semibold block">
+                          Navigation Menu Tabs
+                        </span>
+                        <p className="text-[11px] text-white/40 mt-0.5">
+                          Customize the display label of each navigation tab in the header.
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
+                        {(headerData.navLinks || []).map((link, idx) => (
+                          <div key={link.id || link.href} className="bg-[#121212] p-2.5 rounded-lg border border-white/10">
+                            <span className="block text-[10px] uppercase tracking-wider text-amber-400 font-mono mb-1">
+                              {link.href}
+                            </span>
+                            <input
+                              type="text"
+                              value={link.label}
+                              onChange={(e) => {
+                                const updated = [...(headerData.navLinks || [])];
+                                updated[idx] = { ...updated[idx], label: e.target.value };
+                                setSiteContent({
+                                  ...siteContent,
+                                  header: { ...headerData, navLinks: updated }
+                                });
+                              }}
+                              className="w-full bg-[#1c1c1c] border border-white/10 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* HERO SECTION */}
             <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
               <div className="flex items-center justify-between border-b border-white/5 pb-4">

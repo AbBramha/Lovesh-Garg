@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import siteContent from '@/data/siteContent.json';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,6 +17,21 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const header = (siteContent as any).header || {
+    logo: '/nidhivan-tree-logo.png',
+    brandName: 'Nidhivan',
+    brandSubtitle: 'Design Studio',
+    navLinks: [
+      { id: 'philosophy', label: 'Philosophy', href: '/#philosophy' },
+      { id: 'works', label: 'Works', href: '/#works' },
+      { id: 'matrix', label: 'Matrix', href: '/#design-matrix' },
+      { id: 'estimator', label: 'Estimator', href: '/#project-estimator' },
+      { id: 'contact', label: 'Contact', href: '/#contact' }
+    ],
+    ctaText: '',
+    ctaLink: '/estimate'
+  };
+
   return (
     <motion.header 
       initial={{ y: -100 }}
@@ -23,33 +39,60 @@ export default function Header() {
       transition={{ duration: 0.8, ease: "easeOut", delay: 6 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'bg-white/70 backdrop-blur-md shadow-sm border-b border-white/20 py-3' 
+          ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-black/10 py-3' 
           : 'bg-white/10 backdrop-blur-sm border-b border-white/10 py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
         {/* Logo / Brand Name */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className={`relative w-12 h-10 overflow-hidden transition-all duration-300 ${scrolled ? 'invert' : ''}`}>
+        <Link href="/" className="flex items-center gap-3.5 group">
+          <div className="relative w-11 h-8 rounded-md bg-white p-0.5 overflow-hidden shrink-0 border border-white/20 shadow-sm flex items-center justify-center">
             <Image 
-              src="/logo.png"
-              alt="Nidhivan Logo"
+              src={header.logo || '/nidhivan-tree-logo.png'}
+              alt={`${header.brandName || 'Nidhivan'} Logo`}
               fill
+              sizes="48px"
               className="object-contain"
+              priority
             />
           </div>
           <div className={`font-serif text-xl md:text-2xl font-medium tracking-wide transition-colors duration-300 ${scrolled ? 'text-black' : 'text-white'}`}>
-            Nidhivan <span className="font-light text-xs md:text-sm tracking-widest uppercase ml-2 opacity-80">Design Studio</span>
+            {header.brandName || 'Nidhivan'}{' '}
+            {header.brandSubtitle && (
+              <span className="font-light text-xs md:text-sm tracking-widest uppercase ml-2 opacity-80">
+                {header.brandSubtitle}
+              </span>
+            )}
           </div>
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className={`hidden md:flex items-center gap-8 text-sm font-medium tracking-widest uppercase transition-colors duration-300 ${scrolled ? 'text-black/70' : 'text-white/80'}`}>
-          <Link href="/#philosophy" className={`transition-colors ${scrolled ? 'hover:text-black' : 'hover:text-white'}`}>Philosophy</Link>
-          <Link href="/#works" className={`transition-colors ${scrolled ? 'hover:text-black' : 'hover:text-white'}`}>Works</Link>
-          <Link href="/#design-matrix" className={`transition-colors ${scrolled ? 'hover:text-black' : 'hover:text-white'}`}>Matrix</Link>
-          <Link href="/#contact" className={`transition-colors ${scrolled ? 'hover:text-black' : 'hover:text-white'}`}>Contact</Link>
-        </nav>
+        <div className="hidden md:flex items-center gap-8">
+          <nav className={`flex items-center gap-7 text-xs font-medium tracking-widest uppercase transition-colors duration-300 ${scrolled ? 'text-black/70' : 'text-white/80'}`}>
+            {(header.navLinks || []).map((link: any) => (
+              <Link 
+                key={link.id || link.href} 
+                href={link.href} 
+                className={`transition-colors ${scrolled ? 'hover:text-black' : 'hover:text-white'}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {header.ctaText && (
+            <Link
+              href={header.ctaLink || '/estimate'}
+              className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all shadow-sm ${
+                scrolled
+                  ? 'bg-black text-white hover:bg-neutral-800'
+                  : 'bg-white text-black hover:bg-amber-400'
+              }`}
+            >
+              {header.ctaText}
+            </Link>
+          )}
+        </div>
 
         {/* Mobile Menu Button */}
         <button 
@@ -83,34 +126,25 @@ export default function Header() {
             }`}
           >
             <nav className="flex flex-col gap-4 text-xs font-semibold tracking-widest uppercase">
-              <Link 
-                href="/#philosophy" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1 opacity-80 hover:opacity-100 transition-opacity"
-              >
-                Philosophy
-              </Link>
-              <Link 
-                href="/#works" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1 opacity-80 hover:opacity-100 transition-opacity"
-              >
-                Works
-              </Link>
-              <Link 
-                href="/#design-matrix" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1 opacity-80 hover:opacity-100 transition-opacity"
-              >
-                Matrix
-              </Link>
-              <Link 
-                href="/#contact" 
-                onClick={() => setMobileMenuOpen(false)}
-                className="py-1 opacity-80 hover:opacity-100 transition-opacity"
-              >
-                Contact
-              </Link>
+              {(header.navLinks || []).map((link: any) => (
+                <Link 
+                  key={link.id || link.href}
+                  href={link.href} 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="py-1 opacity-80 hover:opacity-100 transition-opacity"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              {header.ctaText && (
+                <Link
+                  href={header.ctaLink || '/estimate'}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mt-2 text-center py-2.5 bg-amber-400 text-black rounded-lg font-bold text-xs uppercase tracking-wider"
+                >
+                  {header.ctaText}
+                </Link>
+              )}
             </nav>
           </motion.div>
         )}
