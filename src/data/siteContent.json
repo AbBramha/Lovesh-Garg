@@ -84,7 +84,17 @@
     "submitButtonText": "Submit",
     "desktopBackground": "/Footer.png",
     "mobileBackground": "/mobile footer.png",
-    "copyright": "© 2026 Ar. Lovesh Garg. All rights reserved."
+    "copyright": "© 2026 Ar. Lovesh Garg. All rights reserved.",
+    "form": {
+      "subtitle": "Direct studio inquiry for architectural commissions & private consultations",
+      "namePlaceholder": "Name",
+      "emailPlaceholder": "Email",
+      "phonePlaceholder": "Phone Number (Optional)",
+      "showPhone": true,
+      "messagePlaceholder": "Tell us about your project",
+      "submitButtonText": "Submit",
+      "successMessage": "Thank you for reaching out. Our studio team will get back to you shortly."
+    }
   },
   "estimator": {
     "rates": {

@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import siteContent from '@/data/siteContent.json';
@@ -6,6 +7,13 @@ import siteContent from '@/data/siteContent.json';
 export default function Contact() {
   const { contact } = siteContent;
   const footer = (siteContent as any).footer || {};
+  const formConfig = footer.form || {};
+
+  const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
 
   const getCleanBgUrl = (bgPath: string, fallback: string) => {
     const raw = bgPath || fallback;
@@ -15,8 +23,21 @@ export default function Contact() {
   const desktopBg = getCleanBgUrl(footer.desktopBackground, '/Footer.png');
   const mobileBg = getCleanBgUrl(footer.mobileBackground, '/mobile footer.png');
   const headingText = footer.heading || "Let's Talk.";
-  const submitText = footer.submitButtonText || "Submit";
+  const submitText = formConfig.submitButtonText || footer.submitButtonText || "Submit";
   const copyrightText = footer.copyright || (contact as any).copyright || "© 2026 Ar. Lovesh Garg. All rights reserved.";
+
+  const namePlaceholder = formConfig.namePlaceholder || "Name";
+  const emailPlaceholder = formConfig.emailPlaceholder || "Email";
+  const phonePlaceholder = formConfig.phonePlaceholder || "Phone Number (Optional)";
+  const showPhone = formConfig.showPhone !== false;
+  const messagePlaceholder = formConfig.messagePlaceholder || "Tell us about your project";
+  const formSubtitle = formConfig.subtitle || "";
+  const successMessage = formConfig.successMessage || "Thank you for reaching out. Our studio team will get back to you shortly.";
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
 
   return (
     <section id="contact" className="relative min-h-[50vh] bg-black text-white flex items-end">
@@ -44,14 +65,82 @@ export default function Contact() {
       <div className="container mx-auto px-6 relative z-10 pb-10 pt-16 flex flex-col md:flex-row justify-between items-end gap-8">
         <div className="w-full md:w-1/2">
           <h2 className="text-5xl md:text-8xl font-light mb-8">{headingText}</h2>
-          <form className="flex flex-col gap-6 max-w-md">
-            <input type="text" placeholder="Name" className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-white placeholder-white/50 transition-colors" />
-            <input type="email" placeholder="Email" className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-white placeholder-white/50 transition-colors" />
-            <textarea placeholder="Tell us about your project" rows={3} className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-white placeholder-white/50 transition-colors resize-none"></textarea>
-            <button type="submit" className="self-start mt-4 border border-white px-8 py-4 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-white hover:text-black transition-colors">
-              {submitText}
-            </button>
-          </form>
+
+          {submitted ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white/[0.04] border border-amber-400/30 rounded-2xl p-6 sm:p-8 max-w-md space-y-4 backdrop-blur-md"
+            >
+              <div className="w-10 h-10 rounded-full bg-amber-400/20 text-amber-400 flex items-center justify-center text-lg font-bold">
+                ✓
+              </div>
+              <h3 className="text-xl font-serif text-white">Inquiry Received</h3>
+              <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-light">
+                {successMessage}
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitted(false);
+                  setName('');
+                  setEmail('');
+                  setPhone('');
+                  setMessage('');
+                }}
+                className="text-xs uppercase tracking-widest text-amber-400 hover:text-amber-300 font-semibold pt-2 block transition-colors cursor-pointer"
+              >
+                ← Send another inquiry
+              </button>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-md">
+              {formSubtitle && (
+                <p className="text-xs text-white/50 tracking-wider font-light -mt-2">
+                  {formSubtitle}
+                </p>
+              )}
+              <input 
+                type="text" 
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={namePlaceholder} 
+                className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-amber-400 placeholder-white/50 text-white text-sm transition-colors" 
+              />
+              <input 
+                type="email" 
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={emailPlaceholder} 
+                className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-amber-400 placeholder-white/50 text-white text-sm transition-colors" 
+              />
+              {showPhone && (
+                <input 
+                  type="tel" 
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder={phonePlaceholder} 
+                  className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-amber-400 placeholder-white/50 text-white text-sm transition-colors" 
+                />
+              )}
+              <textarea 
+                required
+                rows={3} 
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder={messagePlaceholder} 
+                className="bg-transparent border-b border-white/20 py-4 outline-none focus:border-amber-400 placeholder-white/50 text-white text-sm transition-colors resize-none"
+              ></textarea>
+              <button 
+                type="submit" 
+                className="self-start mt-4 border border-white px-8 py-4 uppercase tracking-[0.2em] text-xs font-semibold hover:bg-white hover:text-black transition-colors cursor-pointer"
+              >
+                {submitText}
+              </button>
+            </form>
+          )}
         </div>
 
         <div className="w-full md:w-1/3 flex flex-col items-start md:items-end gap-6 text-white/80 font-light">

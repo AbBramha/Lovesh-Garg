@@ -107,6 +107,16 @@ interface SiteContent {
     desktopBackground: string;
     mobileBackground: string;
     copyright?: string;
+    form?: {
+      subtitle?: string;
+      namePlaceholder?: string;
+      emailPlaceholder?: string;
+      phonePlaceholder?: string;
+      showPhone?: boolean;
+      messagePlaceholder?: string;
+      submitButtonText?: string;
+      successMessage?: string;
+    };
   };
   estimator: {
     rates: {
@@ -1928,7 +1938,28 @@ export default function AdminPage() {
                 submitButtonText: "Submit",
                 desktopBackground: "/Footer.png",
                 mobileBackground: "/mobile footer.png",
-                copyright: "© 2026 Ar. Lovesh Garg. All rights reserved."
+                copyright: "© 2026 Ar. Lovesh Garg. All rights reserved.",
+                form: {
+                  subtitle: "Direct studio inquiry for architectural commissions & private consultations",
+                  namePlaceholder: "Name",
+                  emailPlaceholder: "Email",
+                  phonePlaceholder: "Phone Number (Optional)",
+                  showPhone: true,
+                  messagePlaceholder: "Tell us about your project",
+                  submitButtonText: "Submit",
+                  successMessage: "Thank you for reaching out. Our studio team will get back to you shortly."
+                }
+              };
+
+              const formData = footerData.form || {
+                subtitle: "Direct studio inquiry for architectural commissions & private consultations",
+                namePlaceholder: "Name",
+                emailPlaceholder: "Email",
+                phonePlaceholder: "Phone Number (Optional)",
+                showPhone: true,
+                messagePlaceholder: "Tell us about your project",
+                submitButtonText: footerData.submitButtonText || "Submit",
+                successMessage: "Thank you for reaching out. Our studio team will get back to you shortly."
               };
 
               const updateFooter = (fields: Partial<typeof footerData>) => {
@@ -1938,13 +1969,23 @@ export default function AdminPage() {
                 });
               };
 
+              const updateFormData = (fields: Partial<typeof formData>) => {
+                setSiteContent({
+                  ...siteContent,
+                  footer: {
+                    ...footerData,
+                    form: { ...formData, ...fields }
+                  }
+                });
+              };
+
               return (
                 <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6">
                   <div className="flex items-center justify-between border-b border-white/5 pb-4">
                     <div>
                       <h3 className="text-lg font-serif font-medium text-white">Website Footer & Contact Section</h3>
                       <p className="text-xs text-white/50 mt-0.5">
-                        Bottom inquiry form headline, submit action button, desktop & mobile backdrop artwork, and studio copyright notice.
+                        Bottom inquiry form headline, submit action button, field labels, desktop & mobile backdrop artwork, and studio copyright notice.
                       </p>
                     </div>
                   </div>
@@ -1970,10 +2011,125 @@ export default function AdminPage() {
                       <input
                         type="text"
                         value={footerData.submitButtonText}
-                        onChange={(e) => updateFooter({ submitButtonText: e.target.value })}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSiteContent({
+                            ...siteContent,
+                            footer: {
+                              ...footerData,
+                              submitButtonText: val,
+                              form: { ...formData, submitButtonText: val }
+                            }
+                          });
+                        }}
                         placeholder="e.g. Submit"
                         className="w-full bg-[#181818] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
                       />
+                    </div>
+
+                    {/* CONTACT FORM FIELDS CONFIGURATION */}
+                    <div className="md:col-span-2 bg-[#181818] p-5 rounded-xl border border-white/5 space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/5">
+                        <div>
+                          <span className="text-xs uppercase tracking-widest text-amber-400 font-semibold block">
+                            Inquiry Contact Form Fields & Behavior
+                          </span>
+                          <p className="text-[11px] text-white/50 mt-0.5">
+                            Customize the inquiry form placeholders, optional phone field, introductory note, and post-submit confirmation message.
+                          </p>
+                        </div>
+                        <label className="text-xs text-white/80 font-medium cursor-pointer flex items-center gap-2 select-none self-start sm:self-auto">
+                          <input
+                            type="checkbox"
+                            checked={formData.showPhone !== false}
+                            onChange={(e) => updateFormData({ showPhone: e.target.checked })}
+                            className="w-4 h-4 rounded border-white/20 bg-[#121212] text-amber-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                          />
+                          <span>Show Phone Number Field</span>
+                        </label>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[11px] uppercase tracking-wider text-white/60 mb-1.5 font-medium">
+                            Field 1: Name Placeholder
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.namePlaceholder || ''}
+                            onChange={(e) => updateFormData({ namePlaceholder: e.target.value })}
+                            placeholder="e.g. Name or Your Full Name / Firm"
+                            className="w-full bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] uppercase tracking-wider text-white/60 mb-1.5 font-medium">
+                            Field 2: Email Placeholder
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.emailPlaceholder || ''}
+                            onChange={(e) => updateFormData({ emailPlaceholder: e.target.value })}
+                            placeholder="e.g. Email or Work Email Address"
+                            className="w-full bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+
+                        {formData.showPhone !== false && (
+                          <div className="sm:col-span-2">
+                            <label className="block text-[11px] uppercase tracking-wider text-white/60 mb-1.5 font-medium">
+                              Field 3: Phone Number Placeholder
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.phonePlaceholder || ''}
+                              onChange={(e) => updateFormData({ phonePlaceholder: e.target.value })}
+                              placeholder="e.g. Phone Number (Optional)"
+                              className="w-full bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                            />
+                          </div>
+                        )}
+
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] uppercase tracking-wider text-white/60 mb-1.5 font-medium">
+                            Field 4: Project Message Placeholder
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.messagePlaceholder || ''}
+                            onChange={(e) => updateFormData({ messagePlaceholder: e.target.value })}
+                            placeholder="e.g. Tell us about your project, timeline & site location"
+                            className="w-full bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] uppercase tracking-wider text-white/60 mb-1.5 font-medium">
+                            Form Intro Subtitle / Note (Optional)
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.subtitle || ''}
+                            onChange={(e) => updateFormData({ subtitle: e.target.value })}
+                            placeholder="e.g. Direct studio inquiry for architectural commissions & private consultations"
+                            className="w-full bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="block text-[11px] uppercase tracking-wider text-white/60 mb-1.5 font-medium">
+                            Submission Confirmation / Success Message
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={formData.successMessage || ''}
+                            onChange={(e) => updateFormData({ successMessage: e.target.value })}
+                            placeholder="e.g. Thank you for reaching out. Our studio team will get back to you shortly."
+                            className="w-full bg-[#121212] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     <div className="md:col-span-2">
